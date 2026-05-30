@@ -304,7 +304,7 @@
         let zd = parseFloat(document.getElementById('zd').value) || 0;
         let hoe = parseFloat(document.getElementById('hoe').value) || 0;
         
-        if (!localTime) { alert("⚠️ Pakilagay ang Local Time."); return; }
+        if (!localTime) { alert("⚠️ Paki-calculate muna bago mag-print."); return; }
         let utcDate = new Date(new Date(localTime).getTime() - (zd * 60 * 60 * 1000));
         
         let latD = parseFloat(document.getElementById('latDeg').value) || 0;
