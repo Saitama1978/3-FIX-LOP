@@ -43,17 +43,17 @@
             html, body { background: #ffffff !important; background-color: #ffffff !important; color: #000000 !important; padding: 0 !important; margin: 0 !important; font-size: 11px !important; }
             .container { box-shadow: none !important; background: #ffffff !important; background-color: #ffffff !important; width: 100% !important; max-width: 100% !important; padding: 5px !important; margin: 0 !important; }
             
-            /* Panatilihin at pwersahing lumabas ang magandang Main Title Header */
+            /* Pwersahing lumabas ang magandang Main Title Header */
             h1 { display: block !important; color: #000000 !important; border-bottom: 2px solid #000000 !important; font-size: 18px !important; margin-bottom: 10px !important; padding-bottom: 5px !important; text-align: center !important; }
             
-            /* Itago ang mga interactive forms at execution controls */
+            /* Itago ang mga interactive forms kapag mag-pi-print */
             button, select, input, label, h3, .sight-card, .btn-secondary { display: none !important; }
             
-            /* Pagandahin at ilabas ang kompletong Voyage Metadata log table block */
+            /* I-display ang malinis na summary grid */
             .result-box { display: block !important; border: none !important; background: #ffffff !important; background-color: #ffffff !important; color: #000000 !important; padding: 0 !important; margin-top: 5px !important; }
             .print-title { color: #000000 !important; font-weight: bold !important; font-size: 13px !important; margin-top: 10px !important; margin-bottom: 5px !important; }
             
-            /* KOMPLETONG VOYAGE DETAILS GRID TABLE */
+            /* VOYAGE DETAILS TABLE FOR PRINT */
             #printMetadata { 
                 display: block !important; 
                 border: 1px solid #000000 !important; 
@@ -68,13 +68,12 @@
             #printMetadata table { width: 100% !important; border-collapse: collapse !important; }
             #printMetadata td { border: none !important; padding: 2px 5px !important; color: #000000 !important; font-size: 11px !important; }
             
-            /* High-Contrast Sight Reduction Log Table */
+            /* Log Table para sa Print */
             .result-table { width: 100% !important; background-color: #ffffff !important; color: #000000 !important; margin-top: 5px !important; font-size: 10px !important; }
             .result-table th, .result-table td { border: 1px solid #000000 !important; color: #000000 !important; padding: 5px !important; background: none !important; }
             .result-table th { background-color: #f1f5f9 !important; color: #000000 !important; font-weight: bold !important; }
-            .result-table td b, .result-table td span { color: #000000 !important; }
             
-            /* Compact Map view compression block - forces alignment into page 1 */
+            /* Compress ang mapa para eksakto sa 1/1 Page */
             #map { display: block !important; height: 320px !important; border: 1px solid #000000 !important; margin-top: 10px !important; background-color: #ffffff !important; page-break-inside: avoid !important; }
             
             .dev-footer { color: #000000 !important; border-top: 1px solid #000000 !important; margin-top: 15px !important; padding-top: 5px !important; font-size: 10px !important; }
@@ -304,7 +303,7 @@
         let zd = parseFloat(document.getElementById('zd').value) || 0;
         let hoe = parseFloat(document.getElementById('hoe').value) || 0;
         
-        if (!localTime) { alert("⚠️ Paki-calculate muna bago mag-print."); return; }
+        if (!localTime) { alert("⚠️ Pakilagay ang Local Time bago mag-calculate."); return; }
         let utcDate = new Date(new Date(localTime).getTime() - (zd * 60 * 60 * 1000));
         
         let latD = parseFloat(document.getElementById('latDeg').value) || 0;
@@ -320,7 +319,6 @@
         let dip = (1.76 * Math.sqrt(hoe)) / 60;
         L.marker([apLat, apLon]).addTo(mapLayerGroup).bindPopup("<b>🌐 Assumed Position (AP)</b>").openPopup();
         
-        // KOMPLETONG RE-RENDERED TABLE TEMPLATE PARA SA METADATA
         let metaHtml = `
             <table style="width:100%; border:none;">
                 <tr>
@@ -343,7 +341,6 @@
         metaPrintBlock.innerHTML = metaHtml;
         metaPrintBlock.style.display = "block";
 
-        // GENERATE TEXT FILE LOG
         globalTxtData = `================================================================================\n`;
         globalTxtData += `                  OFFICIAL AUTOMATED SIGHT REDUCTION REPORT\n`;
         globalTxtData += `================================================================================\n`;
@@ -430,7 +427,7 @@
     }
 
     function downloadLocalRecordFile() {
-        if (!globalTxtData) { alert("⚠️ Paki-calculate muna ang mga Sights bago i-download."); return; }
+        if (!globalTxtData) { alert("⚠️ Paki-calculate muna bago mag-download."); return; }
         let blob = new Blob([globalTxtData], { type: "text/plain;charset=utf-8" });
         let link = document.createElement("a"); link.download = `3_Sight_Complete_Fix_Log.txt`;
         link.href = URL.createObjectURL(blob); document.body.appendChild(link); link.click(); document.body.removeChild(link);
