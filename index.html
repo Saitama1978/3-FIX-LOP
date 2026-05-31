@@ -33,14 +33,13 @@
         
         button { width: 100%; background-color: #5BC0BE; color: #0B132B; border: none; padding: 14px; border-radius: 6px; font-size: 16px; font-weight: bold; margin-top: 20px; cursor: pointer; transition: 0.2s; text-transform: uppercase; letter-spacing: 0.5px; }
         button:hover { background-color: #38BDF8; }
-        
-        /* ACTION BUTTONS CONTAINER SETUP */
-        .action-buttons-group { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
+
+        .btn-group { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
         .btn-save { background-color: #3B82F6; color: white; }
         .btn-save:hover { background-color: #2563EB; }
         .btn-print { background-color: #10B981; color: white; }
         .btn-print:hover { background-color: #059669; }
-
+        
         .report-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 12px; background-color: #0F172A; text-align: center; }
         .report-table th { background-color: #1C2541; color: #38BDF8; padding: 10px; border: 1px solid #3A506B; }
         .report-table td { padding: 8px; border: 1px solid #3A506B; }
@@ -48,23 +47,21 @@
         #map { width: 100%; height: 420px; margin-top: 15px; border-radius: 8px; border: 2px solid #5BC0BE; }
         .dev-footer { text-align: center; margin-top: 30px; padding-top: 15px; border-top: 1px solid #3A506B; font-size: 12px; color: #64748B; }
 
-        /* PRINT MEDIA CONFIGURATION (Para kapag ipriprint ay magiging formal puting papel layout) */
+        /* PRINT MEDIA STYLES */
         @media print {
-            body { background-color: white !important; color: black !important; padding: 0; margin: 0; }
-            .container { background-color: white !important; color: black !important; box-shadow: none !important; max-width: 100% !important; padding: 0 !important; }
-            h1 { color: #000 !important; border-bottom: 2px solid #000 !important; }
-            h3 { color: #000 !important; border-left: 4px solid #000 !important; page-break-after: avoid; }
-            input, select { background-color: #fff !important; color: #000 !important; border: 1px solid #000 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-            .sight-card { background-color: #fff !important; color: #000 !important; border: 1px solid #000 !important; border-top: 4px solid !important; page-break-inside: avoid; }
-            .checkbox-container, button, .action-buttons-group, #map { display: none !important; }
-            .report-table { background-color: #fff !important; color: #000 !important; width: 100% !important; }
-            .report-table th { background-color: #f3f4f6 !important; color: #000 !important; border: 1px solid #000 !important; }
-            .report-table td { border: 1px solid #000 !important; color: #000 !important; }
-            .dev-footer { color: #000 !important; border-top: 1px solid #000 !important; page-break-inside: avoid; }
-            .manual-panel { background: #fff !important; border: 1px solid #000 !important; }
-            .sub-entry-box { background: #fff !important; border: 1px solid #ccc !important; border-left: 3px solid #000 !important; }
+            body { background-color: white; color: black; padding: 0; }
+            .container { background-color: white; box-shadow: none; max-width: 100%; padding: 0; }
+            h1, h3 { color: black; border-bottom-color: black; border-left-color: black; }
+            input, select, button, .checkbox-container, .sight-container { display: none !important; }
             #reportSection { display: block !important; }
+            .report-table { background-color: white; color: black; border: 1px solid black; }
+            .report-table th, .report-table td { border: 1px solid black; color: black !important; background-color: white !important; }
+            #map { border: 1px solid black; height: 350px; page-break-inside: avoid; }
+            .print-header-info { display: block !important; margin-bottom: 20px; color: black; }
+            .print-header-info table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+            .print-header-info td { padding: 5px; border: 1px solid #ccc; font-size: 14px; }
         }
+        .print-header-info { display: none; }
     </style>
 </head>
 <body>
@@ -113,7 +110,6 @@
 
     <h3>🌌 Multi-Sight Observation Data</h3>
     <div class="sight-container">
-        
         <div class="sight-card s1">
             <div class="sight-title" style="color:#EF4444;">🔴 SIGHT #1</div>
             <label>Body / Target:</label>
@@ -168,10 +164,7 @@
 
     <button onclick="calculate3SightIntersectionFix()">Calculate Intersecting LOPs & Plot Fix</button>
 
-    <div class="action-buttons-group">
-        <button class="btn-save" onclick="saveDataToTXT()">💾 Save Calculation Report (.TXT)</button>
-        <button class="btn-print" onclick="printReport()">🖨️ Print Complete Details</button>
-    </div>
+    <div class="print-header-info" id="printHeaderData"></div>
 
     <div id="reportSection" style="display:none;">
         <h3>📊 Automated Sight Reduction Report</h3>
@@ -192,6 +185,11 @@
             <tbody id="reportTableBody"></tbody>
         </table>
 
+        <div class="btn-group">
+            <button class="btn-save" onclick="saveReportAsTxt()">💾 Save Report (.txt)</button>
+            <button class="btn-print" onclick="printReport()">🖨️ Print Report</button>
+        </div>
+
         <h3>🗺️ Real-Time 3-LOP Intersecting Plot Chart</h3>
         <div id="map"></div>
     </div>
@@ -204,9 +202,6 @@
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-    let lastCalculatedData = null;
-
-    // DROPDOWN DATA
     const bodiesDropdownHTML = `
         <optgroup label="Core Solar System">
             <option value="sun" selected>Sun (Araw)</option>
@@ -245,46 +240,48 @@
                 <div class="sub-entry-box">
                     <label style="color:#38BDF8; margin-top:0;">GHA Aries (Hourly):</label>
                     <div class="row-inline">
-                        <input type="number" id="ghaAriesDeg${id}" placeholder="Deg"><span>°</span>
-                        <input type="number" id="ghaAriesMin${id}" placeholder="Min" step="0.1"><span>'</span>
+                        <input type="number" id="ghaAriesDeg${id}" value="120" placeholder="Deg"><span>°</span>
+                        <input type="number" id="ghaAriesMin${id}" value="15.2" placeholder="Min" step="0.1"><span>'</span>
                     </div>
                 </div>
                 <div class="sub-entry-box" style="border-left-color: #A78BFA;">
                     <label style="color:#A78BFA; margin-top:0;">Aries Increments (Min/Sec):</label>
                     <div class="row-inline">
-                        <input type="number" id="incAriesMin${id}" placeholder="Min"><span>'</span>
-                        <input type="number" id="incAriesSec${id}" placeholder="Sec" step="0.1"><span>"</span>
+                        <input type="number" id="incAriesMin${id}" value="5" placeholder="Min"><span>'</span>
+                        <input type="number" id="incAriesSec${id}" value="30" placeholder="Sec" step="0.1"><span>"</span>
                     </div>
                 </div>
                 <div class="sub-entry-box" style="border-left-color: #F59E0B;">
                     <label style="color:#F59E0B; margin-top:0;">SHA of Star:</label>
                     <div class="row-inline">
-                        <input type="number" id="shaDeg${id}" placeholder="Deg"><span>°</span>
-                        <input type="number" id="shaMin${id}" placeholder="Min" step="0.1"><span>'</span>
+                        <input type="number" id="shaDeg${id}" value="48" placeholder="Deg"><span>°</span>
+                        <input type="number" id="shaMin${id}" value="22.1" placeholder="Min" step="0.1"><span>'</span>
                     </div>
                 </div>
             </div>
+
             <div id="solarInput${id}" style="display:none;">
                 <div class="sub-entry-box" style="border-left-color: #10B981;">
                     <label style="color:#10B981; margin-top:0;">Base Hourly GHA:</label>
                     <div class="row-inline">
-                        <input type="number" id="ghaSolDeg${id}" placeholder="Deg"><span>°</span>
-                        <input type="number" id="ghaSolMin${id}" placeholder="Min" step="0.1"><span>'</span>
+                        <input type="number" id="ghaSolDeg${id}" value="180" placeholder="Deg"><span>°</span>
+                        <input type="number" id="ghaSolMin${id}" value="25.4" placeholder="Min" step="0.1"><span>'</span>
                     </div>
                 </div>
                 <div class="sub-entry-box" style="border-left-color: #34D399;">
                     <label style="color:#34D399; margin-top:0;">GHA Increments + v-corr:</label>
                     <div class="row-inline">
-                        <input type="number" id="incSolMin${id}" placeholder="Min" step="0.1"><span>'</span>
+                        <input type="number" id="incSolMin${id}" value="12.3" placeholder="Min" step="0.1"><span>'</span>
                     </div>
                 </div>
             </div>
+
             <div class="sub-entry-box" style="border-left-color: #F43F5E;">
                 <label style="color:#F43F5E; margin-top:0;">Declination (Dec):</label>
                 <div class="row-inline">
-                    <input type="number" id="decDeg${id}" placeholder="Deg"><span>°</span>
-                    <input type="number" id="decMin${id}" placeholder="Min" step="0.1"><span>'</span>
-                    <select id="decDir${id}" style="width:65px; margin-top:0;"><option value="N">N</option><option value="S">S</option></select>
+                    <input type="number" id="decDeg${id}" value="16" placeholder="Deg"><span>°</span>
+                    <input type="number" id="decMin${id}" value="42.0" placeholder="Min" step="0.1"><span>'</span>
+                    <select id="decDir${id}" style="width:65px; margin-top:0;"><option value="N">N</option><option value="S" selected>S</option></select>
                 </div>
             </div>
         `;
@@ -292,6 +289,7 @@
 
     let map = null;
     let layerGroup = null;
+    let globalCalculatedData = null; // Taga-imbak ng data para sa Save/Print
 
     window.onload = function() {
         for(let i=1; i<=3; i++) {
@@ -301,6 +299,7 @@
         document.getElementById('body1').value = "star_17"; 
         document.getElementById('body2').value = "star_16"; 
         document.getElementById('body3').value = "star_36"; 
+        
         for(let i=1; i<=3; i++) { handleBodyTypeChange(i); }
     }
 
@@ -314,8 +313,14 @@
     function handleBodyTypeChange(id) {
         let val = document.getElementById('body' + id).value;
         let isStar = val.startsWith("star_");
-        document.getElementById('starInput' + id).style.display = isStar ? "block" : "none";
-        document.getElementById('solarInput' + id).style.display = isStar ? "none" : "block";
+        
+        let starPanel = document.getElementById('starInput' + id);
+        let solarPanel = document.getElementById('solarInput' + id);
+        
+        if (starPanel && solarPanel) {
+            starPanel.style.display = isStar ? "block" : "none";
+            solarPanel.style.display = isStar ? "none" : "block";
+        }
     }
 
     function calculate3SightIntersectionFix() {
@@ -338,15 +343,23 @@
         let lonDir = document.getElementById('lonDir').value;
         let apLon = lonD + (lonM/60); if(lonDir === 'W') apLon = -apLon;
 
+        let hoe = parseFloat(document.getElementById('hoe').value) || 0;
+        let zd = parseFloat(document.getElementById('zd').value) || 0;
+
         L.marker([apLat, apLon]).addTo(layerGroup).bindPopup("<b>Assumed Position (AP)</b>").openPopup();
 
         let tbody = document.getElementById('reportTableBody');
         tbody.innerHTML = "";
+
         let bodiesData = [];
+        let manualOverride = document.getElementById('manualOverrideToggle').checked;
 
         for(let i=1; i<=3; i++) {
-            let bodyVal = document.getElementById('body' + i).value;
+            let bodySelect = document.getElementById('body' + i);
+            let bodyVal = bodySelect.value;
+            let bodyName = bodySelect.options[bodySelect.selectedIndex].text;
             let isStar = bodyVal.startsWith("star_");
+            
             let finalGHA = 0;
             let finalDec = 0;
             
@@ -354,28 +367,31 @@
             let hsM = parseFloat(document.getElementById('hsMin' + i).value) || 0;
             let hs = hsD + (hsM/60);
             let ie = (parseFloat(document.getElementById('ie' + i).value) || 0) / 60;
-            let hoe = parseFloat(document.getElementById('hoe').value) || 0;
             let dip = (1.76 * Math.sqrt(hoe)) / 60;
             let ho = hs - ie - dip;
 
-            if(document.getElementById('manualOverrideToggle').checked) {
+            if(manualOverride) {
                 if(isStar) {
                     let ariesD = parseFloat(document.getElementById('ghaAriesDeg' + i).value) || 0;
                     let ariesM = parseFloat(document.getElementById('ghaAriesMin' + i).value) || 0;
                     let ariesTotal = ariesD + (ariesM/60);
+
                     let incM = parseFloat(document.getElementById('incAriesMin' + i).value) || 0;
                     let incS = parseFloat(document.getElementById('incAriesSec' + i).value) || 0;
                     let incTotal = (incM / 60) + (incS / 3600);
+
                     let shaD = parseFloat(document.getElementById('shaDeg' + i).value) || 0;
                     let shaM = parseFloat(document.getElementById('shaMin' + i).value) || 0;
                     let shaTotal = shaD + (shaM/60);
+
                     finalGHA = (ariesTotal + incTotal + shaTotal) % 360;
                 } else {
                     let solD = parseFloat(document.getElementById('ghaSolDeg' + i).value) || 0;
                     let solM = parseFloat(document.getElementById('ghaSolMin' + i).value) || 0;
                     let solIncM = parseFloat(document.getElementById('incSolMin' + i).value) || 0;
-                    finalGHA = solD + (solM/60) + (solIncM/60);
+                    finalGHA = (solD + (solM/60) + (solIncM/60)) % 360;
                 }
+                
                 let decD = parseFloat(document.getElementById('decDeg' + i).value) || 0;
                 let decM = parseFloat(document.getElementById('decMin' + i).value) || 0;
                 finalDec = decD + (decM/60);
@@ -405,8 +421,8 @@
             let intDir = intercept >= 0 ? "TOWARDS" : "AWAY";
 
             bodiesData.push({ 
-                name: document.getElementById('body' + i).options[document.getElementById('body' + i).selectedIndex].text, 
-                ho: ho, gha: finalGHA, dec: finalDec, lha: lha, hc: hc, intercept: intercept, intDir: intDir, zn: zn 
+                id: i, name: bodyName, hs: hs, ie: ie*60, ho: ho, gha: finalGHA, 
+                dec: finalDec, lha: lha, hc: hc, intercept: intercept, intDir: intDir, zn: zn 
             });
         }
 
@@ -428,6 +444,7 @@
             let distDeg = (data.intercept / 60);
             let itpLat = apLat + (distDeg * Math.cos(brngRad));
             let itpLon = apLon + ((distDeg * Math.sin(brngRad)) / Math.cos(apLat * Math.PI / 180));
+
             let lopBrngRad = (data.zn + 90) * Math.PI / 180;
             let lineLength = 2.0; 
             L.polyline([
@@ -438,90 +455,101 @@
 
         map.setView([apLat, apLon], 6);
         map.invalidateSize();
-        lastCalculatedData = bodiesData;
+
+        // I-save ang calculated details sa global variable para sa export
+        globalCalculatedData = {
+            vesselName: document.getElementById('vesselName').value,
+            voyageNo: document.getElementById('voyageNo').value,
+            oowName: document.getElementById('oowName').value,
+            remarks: document.getElementById('remarks').value,
+            apLat: `${latD}° ${latM}' ${latDir}`,
+            apLon: `${lonD}° ${lonM}' ${lonDir}`,
+            hoe: hoe,
+            zd: zd,
+            sights: bodiesData
+        };
     }
 
-    // FUNCTION PARA SA PRINTING PROCESS
-    function printReport() {
-        if(!lastCalculatedData) {
-            calculate3SightIntersectionFix();
+    function saveReportAsTxt() {
+        if (!globalCalculatedData) {
+            alert("Please calculate first before saving!");
+            return;
         }
-        window.print();
+        
+        let d = globalCalculatedData;
+        let text = `============================================================\n`;
+        text += `               CELESTIAL NAVIGATION FIX REPORT              \n`;
+        text += `============================================================\n\n`;
+        text += `VESSEL VOYAGE LOG:\n`;
+        text += `  Vessel Name : ${d.vesselName}\n`;
+        text += `  Voyage No.  : ${d.voyageNo}\n`;
+        text += `  OOW Name    : ${d.oowName}\n`;
+        text += `  Remarks     : ${d.remarks}\n\n`;
+        text += `ASSUMED POSITION REFERENCE:\n`;
+        text += `  Assumed Lat : ${d.apLat}\n`;
+        text += `  Assumed Lon : ${d.apLon}\n`;
+        text += `  Height of Eye : ${d.hoe} meters\n`;
+        text += `  Zone Desc   : ${d.zd}\n\n`;
+        text += `============================================================\n`;
+        text += `SIGHT REDUCTION CALCULATION DETAILS:\n`;
+        text += `============================================================\n`;
+
+        d.sights.forEach((s) => {
+            text += `\n[SIGHT #${s.id} - ${s.name}]\n`;
+            text += `  Sextant Hs  : ${s.hs.toFixed(4)}°\n`;
+            text += `  Index Error : ${s.ie.toFixed(1)}'\n`;
+            text += `  Observed Ho : ${s.ho.toFixed(4)}°\n`;
+            text += `  Total GHA   : ${s.gha.toFixed(4)}°\n`;
+            text += `  Declination : ${Math.abs(s.dec).toFixed(4)}° ${s.dec >= 0 ? 'N' : 'S'}\n`;
+            text += `  LHA         : ${s.lha.toFixed(4)}°\n`;
+            text += `  Computed Hc : ${s.hc.toFixed(4)}°\n`;
+            text += `  Intercept   : ${Math.abs(s.intercept).toFixed(1)} NM ${s.intDir}\n`;
+            text += `  Azimuth (Zn): ${s.zn.toFixed(1)}° T\n`;
+            text += `------------------------------------------------------------\n`;
+        });
+        
+        text += `\nGenerated By: 3-Sight Celestial Fix Engine\n`;
+        text += `Developer: 2/O RENANTE FULLO\n`;
+
+        let blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+        let link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = `Celestial_Fix_Report_${d.vesselName}_Voy_${d.voyageNo}.txt`;
+        link.click();
     }
 
-    // FUNCTION PARA SA PAG-SAVE NG MATALINONG TXT FILE
-    function saveDataToTXT() {
-        if(!lastCalculatedData) {
-            alert("Pakisuyong i-calculate muna ang positions bago i-save.");
+    function printReport() {
+        if (!globalCalculatedData) {
+            alert("Please calculate first before printing!");
             return;
         }
 
-        let textContent = "";
-        textContent += "=========================================================\\n";
-        textContent += "             3-SIGHT CELESTIAL FIX ENGINE REPORT        \\n";
-        textContent += "=========================================================\\n\\n";
+        let d = globalCalculatedData;
+        // Gumawa ng malinis na header table para makita sa print layout
+        let htmlHeader = `
+            <h2>⚓ CELESTIAL SIGHT REDUCTION WORK SHEET</h2>
+            <table>
+                <tr>
+                    <td><b>Vessel:</b> ${d.vesselName}</td>
+                    <td><b>Voyage No:</b> ${d.voyageNo}</td>
+                    <td><b>OOW:</b> ${d.oowName}</td>
+                </tr>
+                <tr>
+                    <td><b>Assumed Lat:</b> ${d.apLat}</td>
+                    <td><b>Assumed Lon:</b> ${d.apLon}</td>
+                    <td><b>Remarks:</b> ${d.remarks}</td>
+                </tr>
+                <tr>
+                    <td><b>HOE:</b> ${d.hoe} m</td>
+                    <td><b>Zone Description:</b> UTC ${d.zd >= 0 ? '+' + d.zd : d.zd}</td>
+                    <td><b>Date Printed:</b> ${new Date().toLocaleString()}</td>
+                </tr>
+            </table>
+        `;
+        document.getElementById('printHeaderData').innerHTML = htmlHeader;
         
-        textContent += "📝 VESSEL VOYAGE LOG\\n";
-        textContent += "---------------------------------------------------------\\n";
-        textContent += "Vessel Name: " + document.getElementById('vesselName').value + "\\n";
-        textContent += "Voyage Number: " + document.getElementById('voyageNo').value + "\\n";
-        textContent += "Officer on Watch (OOW): " + document.getElementById('oowName').value + "\\n";
-        textContent += "Remarks / Environment: " + document.getElementById('remarks').value + "\\n\\n";
-
-        textContent += "🌐 ASSUMED POSITION (AP) - BASE REFERENCE\\n";
-        textContent += "---------------------------------------------------------\\n";
-        textContent += "Assumed Latitude: " + document.getElementById('latDeg').value + "° " + document.getElementById('latMin').value + "' " + document.getElementById('latDir').value + "\\n";
-        textContent += "Assumed Longitude: " + document.getElementById('lonDeg').value + "° " + document.getElementById('lonMin').value + "' " + document.getElementById('lonDir').value + "\\n";
-        textContent += "Height of Eye (HOE): " + document.getElementById('hoe').value + " meters\\n";
-        textContent += "Zone Description (ZD): " + document.getElementById('zd').value + "\\n\\n";
-
-        textContent += "🌌 SIGHT OBSERVATION INPUTS\\n";
-        textContent += "---------------------------------------------------------\\n";
-        for(let i=1; i<=3; i++) {
-            let bodySelect = document.getElementById('body' + i);
-            let bodyName = bodySelect.options[bodySelect.selectedIndex].text;
-            textContent += "SIGHT #" + i + " - Target Body: " + bodyName + "\\n";
-            textContent += "  Sextant Altitude (Hs): " + document.getElementById('hsDeg' + i).value + "° " + document.getElementById('hsMin' + i).value + "'\\n";
-            textContent += "  Index Error (IE): " + document.getElementById('ie' + i).value + "'\\n";
-            
-            if(document.getElementById('manualOverrideToggle').checked) {
-                textContent += "  [Manual Almanac Enabled]\\n";
-                if(bodySelect.value.startsWith("star_")) {
-                    textContent += "    GHA Aries (Hourly): " + (document.getElementById('ghaAriesDeg' + i).value || 0) + "° " + (document.getElementById('ghaAriesMin' + i).value || 0) + "'\\n";
-                    textContent += "    Aries Increments: " + (document.getElementById('incAriesMin' + i).value || 0) + "' " + (document.getElementById('incAriesSec' + i).value || 0) + '"\\n';
-                    textContent += "    SHA of Star: " + (document.getElementById('shaDeg' + i).value || 0) + "° " + (document.getElementById('shaMin' + i).value || 0) + "'\\n";
-                } else {
-                    textContent += "    Base Hourly GHA: " + (document.getElementById('ghaSolDeg' + i).value || 0) + "° " + (document.getElementById('ghaSolMin' + i).value || 0) + "'\\n";
-                    textContent += "    GHA Increments + v-corr: " + (document.getElementById('incSolMin' + i).value || 0) + "'\\n";
-                }
-                textContent += "    Declination (Dec): " + (document.getElementById('decDeg' + i).value || 0) + "° " + (document.getElementById('decMin' + i).value || 0) + "' " + document.getElementById('decDir' + i).value + "\\n";
-            }
-            textContent += "\\n";
-        }
-
-        textContent += "📊 AUTOMATED SIGHT REDUCTION RESULTS\\n";
-        textContent += "---------------------------------------------------------\\n";
-        lastCalculatedData.forEach((data, index) => {
-            textContent += "Sight " + (index + 1) + " [" + data.name + "]:\\n";
-            textContent += "  True Ho      : " + data.ho.toFixed(2) + "°\\n";
-            textContent += "  Total GHA    : " + data.gha.toFixed(2) + "°\\n";
-            textContent += "  Declination  : " + Math.abs(data.dec).toFixed(1) + "° " + (data.dec >= 0 ? 'N' : 'S') + "\\n";
-            textContent += "  LHA          : " + data.lha.toFixed(2) + "°\\n";
-            textContent += "  Computed Hc  : " + data.hc.toFixed(2) + "°\\n";
-            textContent += "  Intercept    : " + Math.abs(data.intercept).toFixed(1) + " NM " + data.intDir + "\\n";
-            textContent += "  Azimuth (Zn) : " + data.zn.toFixed(1) + "° T\\n";
-            textContent += "---------------------------------------------------------\\n";
-        });
-
-        textContent += "\\nSystem Application Developed By: 2/O RENANTE FULLO\\n";
-
-        let blob = new Blob([textContent], { type: "text/plain;charset=utf-8" });
-        let link = document.createElement("a");
-        link.href = URL.createObjectURL(blob);
-        link.download = "Celestial_Fix_Report_" + (document.getElementById('vesselName').value).replace(/\\s+/g, '_') + "_Voy" + document.getElementById('voyageNo').value + ".txt";
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        // I-trigger ang print dialog
+        window.print();
     }
 </script>
 </body>
