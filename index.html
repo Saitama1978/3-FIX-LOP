@@ -67,9 +67,8 @@
 <body>
 
 <div class="container">
-    <h1>⚓ 3-SIGHT CELESTIAL FIX ENGINE <span style="font-size:12px; color:#5BC0BE;"</h1>
+    <h1>⚓ 3-SIGHT CELESTIAL FIX ENGINE <span style="font-size:12px; color:#5BC0BE;">[COMPLETE LIST & SEPARATE MINUTES]</span></h1>
 
-    <!-- LOG & REFERENCE -->
     <h3>📝 Vessel Voyage Log</h3>
     <div class="grid-2">
         <div><label>Vessel Name:</label><input type="text" id="vesselName" value="MV"></div>
@@ -80,7 +79,6 @@
         <div><label>Remarks / Environment:</label><input type="text" id="remarks" value="3-Star Twilight Sight Fix"></div>
     </div>
 
-    <!-- POSITION REFERENCE -->
     <h3>🌐 Assumed Position (AP) - Base Reference</h3>
     <div class="grid-2">
         <div>
@@ -110,21 +108,26 @@
         <label for="manualOverrideToggle" style="margin:0; color:#F59E0B; cursor:pointer; font-weight: bold;">⚠️ ENABLE MANUAL ALMANAC DATA ENTRY FOR ALL ENGINES</label>
     </div>
 
-    <!-- MULTI SIGHT OBSERVATION CHANNELS -->
     <h3>🌌 Multi-Sight Observation Data</h3>
     <div class="sight-container">
-        <!-- SIGHT #1 -->
         <div class="sight-card s1">
             <div class="sight-title" style="color:#EF4444;">🔴 SIGHT #1</div>
             <label>Body / Target:</label>
             <select id="body1" onchange="handleBodyTypeChange(1)"></select>
             
-            <!-- ISININGIT NA TIME INPUT SA BABA NG DROPDOWN -->
             <label>Time of Sight (GMT/LMT):</label>
             <div class="row-inline">
                 <input type="number" id="timeHour1" value="05" min="0" max="23" placeholder="HH"><span>:</span>
                 <input type="number" id="timeMin1" value="14" min="0" max="59" placeholder="MM"><span>:</span>
                 <input type="number" id="timeSec1" value="25" min="0" max="59" placeholder="SS">
+            </div>
+
+            <div id="limbContainer1" style="display:none;">
+                <label style="color:#F87171;">Sun/Moon Limb Selection:</label>
+                <select id="limbType1">
+                    <option value="LL" selected>Lower Limb (LL) [ +16.0' SD ]</option>
+                    <option value="UL">Upper Limb (UL) [ -16.0' SD ]</option>
+                </select>
             </div>
             
             <label>Sextant Altitude (Hs):</label>
@@ -139,18 +142,24 @@
             <div id="manualPanel1" class="manual-panel"></div>
         </div>
 
-        <!-- SIGHT #2 -->
         <div class="sight-card s2">
             <div class="sight-title" style="color:#10B981;">🟢 SIGHT #2</div>
             <label>Body / Target:</label>
             <select id="body2" onchange="handleBodyTypeChange(2)"></select>
             
-            <!-- ISININGIT NA TIME INPUT SA BABA NG DROPDOWN -->
             <label>Time of Sight (GMT/LMT):</label>
             <div class="row-inline">
                 <input type="number" id="timeHour2" value="05" min="0" max="23" placeholder="HH"><span>:</span>
                 <input type="number" id="timeMin2" value="16" min="0" max="59" placeholder="MM"><span>:</span>
                 <input type="number" id="timeSec2" value="40" min="0" max="59" placeholder="SS">
+            </div>
+
+            <div id="limbContainer2" style="display:none;">
+                <label style="color:#34D399;">Sun/Moon Limb Selection:</label>
+                <select id="limbType2">
+                    <option value="LL" selected>Lower Limb (LL) [ +16.0' SD ]</option>
+                    <option value="UL">Upper Limb (UL) [ -16.0' SD ]</option>
+                </select>
             </div>
             
             <label>Sextant Altitude (Hs):</label>
@@ -165,18 +174,24 @@
             <div id="manualPanel2" class="manual-panel"></div>
         </div>
 
-        <!-- SIGHT #3 -->
         <div class="sight-card s3">
             <div class="sight-title" style="color:#F59E0B;">🟡 SIGHT #3</div>
             <label>Body / Target:</label>
             <select id="body3" onchange="handleBodyTypeChange(3)"></select>
             
-            <!-- ISININGIT NA TIME INPUT SA BABA NG DROPDOWN -->
             <label>Time of Sight (GMT/LMT):</label>
             <div class="row-inline">
                 <input type="number" id="timeHour3" value="05" min="0" max="23" placeholder="HH"><span>:</span>
                 <input type="number" id="timeMin3" value="18" min="0" max="59" placeholder="MM"><span>:</span>
                 <input type="number" id="timeSec3" value="12" min="0" max="59" placeholder="SS">
+            </div>
+
+            <div id="limbContainer3" style="display:none;">
+                <label style="color:#FBBF24;">Sun/Moon Limb Selection:</label>
+                <select id="limbType3">
+                    <option value="LL" selected>Lower Limb (LL) [ +16.0' SD ]</option>
+                    <option value="UL">Upper Limb (UL) [ -16.0' SD ]</option>
+                </select>
             </div>
             
             <label>Sextant Altitude (Hs):</label>
@@ -194,10 +209,8 @@
 
     <button onclick="calculate3SightIntersectionFix()">Calculate Intersecting LOPs & Plot Fix</button>
 
-    <!-- PRINT ONLY DYNAMIC CONTAINER INFO -->
     <div class="print-header-info" id="printHeaderData"></div>
 
-    <!-- CALCULATED RESULTS AND CHARTS REPORT -->
     <div id="reportSection" style="display:none;">
         <h3>📊 Automated Sight Reduction Report</h3>
         <table class="report-table">
@@ -354,6 +367,14 @@
             starPanel.style.display = isStar ? "block" : "none";
             solarPanel.style.display = isStar ? "none" : "block";
         }
+
+        // CONTROL NG LIMB DROPDOWN (LILITAW LANG PAG SUN O MOON ANG TARGET)
+        let limbContainer = document.getElementById('limbContainer' + id);
+        if(val === "sun" || val === "moon") {
+            limbContainer.style.display = "block";
+        } else {
+            limbContainer.style.display = "none";
+        }
     }
 
     function padZero(num) {
@@ -397,7 +418,6 @@
             let bodyName = bodySelect.options[bodySelect.selectedIndex].text;
             let isStar = bodyVal.startsWith("star_");
             
-            // Kuhanin ang Time details bawat Sight card
             let h = padZero(parseInt(document.getElementById('timeHour' + i).value) || 0);
             let m = padZero(parseInt(document.getElementById('timeMin' + i).value) || 0);
             let s = padZero(parseInt(document.getElementById('timeSec' + i).value) || 0);
@@ -411,7 +431,22 @@
             let hs = hsD + (hsM/60);
             let ie = (parseFloat(document.getElementById('ie' + i).value) || 0) / 60;
             let dip = (1.76 * Math.sqrt(hoe)) / 60;
+            
+            // BASE OBSERVED ALTITUDE CALCULATOR
             let ho = hs - ie - dip;
+
+            // ISINAMANG SEMI-DIAMETER CORRECTION SA HO CALCULATION PAG SUN/MOON
+            if(bodyVal === "sun" || bodyVal === "moon") {
+                let limbType = document.getElementById('limbType' + i).value;
+                let sdCorrection = 16.0 / 60; // Standard 16.0 Arc-minutes conversion to Degrees
+                if(limbType === "LL") {
+                    ho += sdCorrection; // +16.0' para sa Lower Limb
+                    bodyName += " (LL)";
+                } else {
+                    ho -= sdCorrection; // -16.0' para sa Upper Limb
+                    bodyName += " (UL)";
+                }
+            }
 
             if(manualOverride) {
                 if(isStar) {
