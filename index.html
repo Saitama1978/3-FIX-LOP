@@ -8,13 +8,13 @@
     <style>
         /* WEB SCREEN DEFAULT STYLE */
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: #0F172A; color: #E2E8F0; padding: 15px; margin: 0; }
-        .container { max-width: 900px; margin: 0 auto; background-color: #1E293B; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        .container { max-width: 1000px; margin: 0 auto; background-color: #1E293B; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
         h1 { text-align: center; color: #38BDF8; font-size: 26px; font-weight: 800; border-bottom: 2px solid #334155; padding-bottom: 12px; margin-top: 0; letter-spacing: 1px; }
         h3 { color: #0EA5E9; border-left: 4px solid #0EA5E9; padding-left: 8px; margin-top: 20px; font-size: 16px; margin-bottom: 10px; }
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; }
         label { display: block; margin-top: 10px; font-size: 13px; color: #94A3B8; font-weight: bold; }
-        input, select { width: 100%; padding: 10px; margin-top: 5px; background-color: #334155; border: 1px solid #475569; border-radius: 6px; color: white; font-size: 15px; box-sizing: border-box; }
+        input, select { width: 100%; padding: 10px; margin-top: 5px; background-color: #334155; border: 1px solid #475569; border-radius: 6px; color: white; font-size: 14px; box-sizing: border-box; }
         input:focus, select:focus { border-color: #38BDF8; outline: none; }
         .row-inline { display: flex; gap: 10px; align-items: center; }
         button { width: 100%; background-color: #0EA5E9; color: #0F172A; border: none; padding: 14px; border-radius: 6px; font-size: 16px; font-weight: bold; margin-top: 25px; cursor: pointer; transition: 0.2s; }
@@ -29,8 +29,8 @@
         .sight-title { font-weight: bold; font-size: 15px; margin-bottom: 5px; }
         
         .result-box { background-color: #0F172A; padding: 20px; border-radius: 8px; margin-top: 20px; border-left: 5px solid #38BDF8; display: none; }
-        .result-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 14px; color: #E2E8F0; }
-        .result-table th, .result-table td { border: 1px solid #334155; padding: 10px; text-align: left; }
+        .result-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 13px; color: #E2E8F0; }
+        .result-table th, .result-table td { border: 1px solid #334155; padding: 8px; text-align: left; }
         .result-table th { background-color: #1E293B; color: #38BDF8; font-weight: bold; }
         
         #map { width: 100%; height: 450px; margin-top: 15px; border-radius: 8px; border: 2px solid #38BDF8; background-color: #111827; }
@@ -38,22 +38,15 @@
         .dev-footer { text-align: center; margin-top: 30px; padding-top: 15px; border-top: 1px solid #334155; font-size: 12px; color: #64748B; }
         .dev-name { color: #F59E0B; font-weight: bold; font-size: 14px; letter-spacing: 0.5px; margin-top: 3px; }
 
-        /* PRINT MANAGEMENT AREA - FORCES EVERYTHING INTO A SINGLE COMPACT 1/1 HIGH-QUALITY LOG */
+        /* PRINT MANAGEMENT AREA */
         @media print {
             html, body { background: #ffffff !important; background-color: #ffffff !important; color: #000000 !important; padding: 0 !important; margin: 0 !important; font-size: 11px !important; }
             .container { box-shadow: none !important; background: #ffffff !important; background-color: #ffffff !important; width: 100% !important; max-width: 100% !important; padding: 5px !important; margin: 0 !important; }
-            
-            /* Pwersahing lumabas ang magandang Main Title Header */
             h1 { display: block !important; color: #000000 !important; border-bottom: 2px solid #000000 !important; font-size: 18px !important; margin-bottom: 10px !important; padding-bottom: 5px !important; text-align: center !important; }
-            
-            /* Itago ang mga interactive forms kapag mag-pi-print */
             button, select, input, label, h3, .sight-card, .btn-secondary { display: none !important; }
-            
-            /* I-display ang malinis na summary grid */
             .result-box { display: block !important; border: none !important; background: #ffffff !important; background-color: #ffffff !important; color: #000000 !important; padding: 0 !important; margin-top: 5px !important; }
             .print-title { color: #000000 !important; font-weight: bold !important; font-size: 13px !important; margin-top: 10px !important; margin-bottom: 5px !important; }
             
-            /* VOYAGE DETAILS TABLE FOR PRINT */
             #printMetadata { 
                 display: block !important; 
                 border: 1px solid #000000 !important; 
@@ -68,14 +61,11 @@
             #printMetadata table { width: 100% !important; border-collapse: collapse !important; }
             #printMetadata td { border: none !important; padding: 2px 5px !important; color: #000000 !important; font-size: 11px !important; }
             
-            /* Log Table para sa Print */
-            .result-table { width: 100% !important; background-color: #ffffff !important; color: #000000 !important; margin-top: 5px !important; font-size: 10px !important; }
-            .result-table th, .result-table td { border: 1px solid #000000 !important; color: #000000 !important; padding: 5px !important; background: none !important; }
+            .result-table { width: 100% !important; background-color: #ffffff !important; color: #000000 !important; margin-top: 5px !important; font-size: 9px !important; }
+            .result-table th, .result-table td { border: 1px solid #000000 !important; color: #000000 !important; padding: 4px !important; background: none !important; }
             .result-table th { background-color: #f1f5f9 !important; color: #000000 !important; font-weight: bold !important; }
             
-            /* Compress ang mapa para eksakto sa 1/1 Page */
             #map { display: block !important; height: 320px !important; border: 1px solid #000000 !important; margin-top: 10px !important; background-color: #ffffff !important; page-break-inside: avoid !important; }
-            
             .dev-footer { color: #000000 !important; border-top: 1px solid #000000 !important; margin-top: 15px !important; padding-top: 5px !important; font-size: 10px !important; }
             .dev-name { color: #000000 !important; font-weight: bold !important; font-size: 11px !important; }
         }
@@ -84,7 +74,7 @@
 <body>
 
 <div class="container">
-    <h1>⚓ 3-SIGHT CELESTIAL FIX ENGINE <span style="font-size:12px; color:#10B981; vertical-align:middle;">[ULTIMATE LOG v3.54]</span></h1>
+    <h1>⚓ 3-SIGHT CELESTIAL FIX ENGINE <span style="font-size:12px; color:#10B981; vertical-align:middle;">[DYNAMIC INTERVAL v4.00]</span></h1>
 
     <h3>📝 Vessel Voyage Log</h3>
     <div class="grid-2">
@@ -108,23 +98,25 @@
         </div>
     </div>
 
-    <h3>🕒 Global Time & Correction Settings</h3>
-    <div class="grid-3">
-        <div>
-            <label>Local Time & Date:</label>
-            <input type="datetime-local" id="localTime" onchange="calculateUTC()">
-        </div>
+    <h3>🕒 Core Environmental & Zone Setup</h3>
+    <div class="grid-2">
         <div>
             <label>Zone Description (ZD):</label>
-            <input type="number" id="zd" value="8" step="1" onchange="calculateUTC()">
+            <input type="number" id="zd" value="8" step="1" onchange="syncAllDatesAndTimes()">
         </div>
         <div>
             <label>Height of Eye (HOE):</label>
             <input type="number" id="hoe" placeholder="Meters" value="12">
         </div>
     </div>
-    <label>Calculated UTC / GMT (AUTO):</label>
-    <input type="text" id="utcTime" readonly style="background-color: #1E293B; color: #10B981; font-weight: bold;">
+    
+    <div style="background: rgba(255,255,255,0.02); padding: 12px; border-radius: 6px; margin-top: 15px; border: 1px dashed #475569;">
+        <label style="margin-top: 0; color: #38BDF8;">⚡ Fast-Fill Target Date & Base Time (Opsyonal para sabay mag-set):</label>
+        <div class="grid-2" style="margin-top: 5px;">
+            <input type="date" id="bulkDate" onchange="syncAllDatesAndTimes()">
+            <input type="time" id="bulkTime" onchange="syncAllDatesAndTimes()">
+        </div>
+    </div>
 
     <h3>🌐 Assumed Position (AP) - Base Reference</h3>
     <div class="grid-2">
@@ -146,12 +138,18 @@
         </div>
     </div>
 
-    <h3>🌌 Multi-Sight Observation Data</h3>
+    <h3>🌌 Multi-Sight Observation Data (With Independent Time Intervals)</h3>
     <div class="grid-3">
         <div class="sight-card s1">
             <div class="sight-title" style="color: #38BDF8;">🎯 SIGHT #1</div>
             <label>Body / Target:</label>
             <select id="body1"></select>
+            
+            <label>Obs Date (LMT):</label>
+            <input type="date" id="date1">
+            <label>Obs Time (LMT):</label>
+            <input type="time" id="time1" value="17:50">
+            
             <label>Sextant Altitude (Hs):</label>
             <div class="row-inline">
                 <input type="number" id="hsDeg1" value="45" style="width:70px;">
@@ -165,6 +163,12 @@
             <div class="sight-title" style="color: #10B981;">🎯 SIGHT #2</div>
             <label>Body / Target:</label>
             <select id="body2"></select>
+            
+            <label>Obs Date (LMT):</label>
+            <input type="date" id="date2">
+            <label>Obs Time (LMT):</label>
+            <input type="time" id="time2" value="17:53">
+            
             <label>Sextant Altitude (Hs):</label>
             <div class="row-inline">
                 <input type="number" id="hsDeg2" value="38" style="width:70px;">
@@ -178,6 +182,12 @@
             <div class="sight-title" style="color: #F59E0B;">🎯 SIGHT #3</div>
             <label>Body / Target:</label>
             <select id="body3"></select>
+            
+            <label>Obs Date (LMT):</label>
+            <input type="date" id="date3">
+            <label>Obs Time (LMT):</label>
+            <input type="time" id="time3" value="17:57">
+            
             <label>Sextant Altitude (Hs):</label>
             <div class="row-inline">
                 <input type="number" id="hsDeg3" value="52" style="width:70px;">
@@ -203,6 +213,7 @@
             <thead>
                 <tr>
                     <th>Sight</th>
+                    <th>Time (UTC)</th>
                     <th>Body Target</th>
                     <th>Raw Hs</th>
                     <th>IE</th>
@@ -238,19 +249,33 @@
 
     let map = null, mapLayerGroup = null, globalTxtData = "";
 
-    function calculateUTC() {
-        const localInput = document.getElementById('localTime').value;
-        const zd = parseFloat(document.getElementById('zd').value) || 0;
-        if (!localInput) return;
-        let localDate = new Date(localInput);
-        document.getElementById('utcTime').value = new Date(localDate.getTime() - (zd * 60 * 60 * 1000)).toUTCString();
+    function syncAllDatesAndTimes() {
+        let bDate = document.getElementById('bulkDate').value;
+        let bTime = document.getElementById('bulkTime').value;
+        
+        if(bDate) {
+            document.getElementById('date1').value = bDate;
+            document.getElementById('date2').value = bDate;
+            document.getElementById('date3').value = bDate;
+        }
+    }
+
+    function convertToUTCDate(dateStr, timeStr, zd) {
+        if (!dateStr || !timeStr) return null;
+        let localDateTime = new Date(`${dateStr}T${timeStr}`);
+        return new Date(localDateTime.getTime() - (zd * 60 * 60 * 1000));
     }
 
     window.onload = function() {
         let now = new Date();
-        document.getElementById('zd').value = -Math.floor(now.getTimezoneOffset() / 60);
-        document.getElementById('localTime').value = new Date(now.getTime() - (now.getTimezoneOffset() * 60000)).toISOString().slice(0, 16);
-        calculateUTC();
+        let formattedDate = now.toISOString().slice(0, 10);
+        
+        document.getElementById('zd').value = 8;
+        document.getElementById('bulkDate').value = formattedDate;
+        
+        document.getElementById('date1').value = formattedDate;
+        document.getElementById('date2').value = formattedDate;
+        document.getElementById('date3').value = formattedDate;
 
         populateBodySelect('body1', 'sirius');
         populateBodySelect('body2', 'canopus');
@@ -299,12 +324,8 @@
         let voyage = document.getElementById('voyageNo').value || "N/A";
         let oow = document.getElementById('oowName').value || "N/A";
         let remarks = document.getElementById('remarks').value || "N/A";
-        let localTime = document.getElementById('localTime').value;
         let zd = parseFloat(document.getElementById('zd').value) || 0;
         let hoe = parseFloat(document.getElementById('hoe').value) || 0;
-        
-        if (!localTime) { alert("⚠️ Pakilagay ang Local Time bago mag-calculate."); return; }
-        let utcDate = new Date(new Date(localTime).getTime() - (zd * 60 * 60 * 1000));
         
         let latD = parseFloat(document.getElementById('latDeg').value) || 0;
         let latM = parseFloat(document.getElementById('latMin').value) || 0;
@@ -319,6 +340,16 @@
         let dip = (1.76 * Math.sqrt(hoe)) / 60;
         L.marker([apLat, apLon]).addTo(mapLayerGroup).bindPopup("<b>🌐 Assumed Position (AP)</b>").openPopup();
         
+        // Validation check for individual times
+        for(let i=1; i<=3; i++) {
+            let dVal = document.getElementById(`date${i}`).value;
+            let tVal = document.getElementById(`time${i}`).value;
+            if(!dVal || !tVal) {
+                alert(`⚠️ Pakilagay ang Date at Time para sa Sight #${i}.`);
+                return;
+            }
+        }
+
         let metaHtml = `
             <table style="width:100%; border:none;">
                 <tr>
@@ -327,26 +358,23 @@
                     <td style="width:34%"><b>Officer on Watch:</b> ${oow}</td>
                 </tr>
                 <tr>
-                    <td><b>Local Time:</b> ${localTime.replace("T", " ")} (ZD: ${zd >= 0 ? '+' : ''}${zd})</td>
-                    <td><b>Calculated UTC:</b> ${utcDate.toUTCString()}</td>
+                    <td><b>Assumed Position:</b> LAT ${latD}° ${latM}' ${latDir} , LON ${lonD}° ${lonM}' ${lonDir}</td>
+                    <td><b>Zone Description:</b> ZD ${zd >= 0 ? '+' : ''}${zd}</td>
                     <td><b>Height of Eye:</b> ${hoe}m (Dip: -${(dip*60).toFixed(1)}')</td>
                 </tr>
                 <tr>
-                    <td><b>Assumed Position:</b> LAT ${latD}° ${latM}' ${latDir} , LON ${lonD}° ${lonM}' ${lonDir}</td>
-                    <td colspan="2"><b>Remarks / Environment:</b> ${remarks}</td>
+                    <td colspan="3"><b>Remarks / Environment:</b> ${remarks}</td>
                 </tr>
             </table>
         `;
-        let metaPrintBlock = document.getElementById('printMetadata');
-        metaPrintBlock.innerHTML = metaHtml;
-        metaPrintBlock.style.display = "block";
+        document.getElementById('printMetadata').innerHTML = metaHtml;
+        document.getElementById('printMetadata').style.display = "block";
 
         globalTxtData = `================================================================================\n`;
         globalTxtData += `                  OFFICIAL AUTOMATED SIGHT REDUCTION REPORT\n`;
         globalTxtData += `================================================================================\n`;
         globalTxtData += `Vessel Name     : ${vessel}\nVoyage Number   : ${voyage}\nOfficer on Watch: ${oow}\nRemarks         : ${remarks}\n`;
         globalTxtData += `--------------------------------------------------------------------------------\n`;
-        globalTxtData += `Local Date/Time : ${localTime} (ZD: ${zd})\nGreenwich (UTC) : ${utcDate.toUTCString()}\n`;
         globalTxtData += `Assumed Lat     : ${latD}° ${latM}' ${latDir}\nAssumed Long    : ${lonD}° ${lonM}' ${lonDir}\n`;
         globalTxtData += `Height of Eye   : ${hoe} meters (Calculated Dip Correction: -${(dip*60).toFixed(1)} ')\n`;
         globalTxtData += `================================================================================\n\n`;
@@ -354,10 +382,15 @@
         let colors = ["#38BDF8", "#10B981", "#F59E0B"];
         for (let i = 1; i <= 3; i++) {
             let bodyKey = document.getElementById(`body${i}`).value;
+            let dVal = document.getElementById(`date${i}`).value;
+            let tVal = document.getElementById(`time${i}`).value;
             let hsDeg = parseFloat(document.getElementById(`hsDeg${i}`).value) || 0;
             let hsMin = parseFloat(document.getElementById(`hsMin${i}`).value) || 0;
             let ieVal = parseFloat(document.getElementById(`ie${i}`).value) || 0;
             let ie = ieVal / 60;
+            
+            let utcDate = convertToUTCDate(dVal, tVal, zd);
+            let timeStringUTC = utcDate.toUTCString().replace("GMT", "UTC");
             
             let data = computeEphemeris(bodyKey, utcDate);
             let lha = (data.gha + apLon) % 360; if(lha < 0) lha += 360;
@@ -381,6 +414,7 @@
             
             tbody.innerHTML += `<tr>
                 <td><b>Sight ${i}</b></td>
+                <td>${tVal} LMT<br><small style="color:#10B981;">${utcDate.toISOString().slice(11,16)} UTC</small></td>
                 <td><b>${data.name}</b></td>
                 <td>${hsDeg}° ${hsMin}'</td>
                 <td>${ieVal >= 0 ? '+' : ''}${ieVal}'</td>
@@ -395,6 +429,8 @@
             </tr>`;
             
             globalTxtData += `[SIGHT #${i} REDUCTION DETAILS - ${data.name}]\n`;
+            globalTxtData += `  -> Sighting Time (LMT)   : ${dVal} ${tVal} (ZD: ${zd})\n`;
+            globalTxtData += `  -> Calculated Time (UTC) : ${timeStringUTC}\n`;
             globalTxtData += `  -> Sextant Altitude (Hs) : ${hsDeg}° ${hsMin}'\n`;
             globalTxtData += `  -> Index Error (IE)      : ${ieVal >= 0 ? '+' : ''}${ieVal}'\n`;
             globalTxtData += `  -> True Observed Alt (Ho): ${ho.toFixed(4)}°\n`;
@@ -408,7 +444,7 @@
             
             plotLopVector(apLat, apLon, zn, intercept, colors[i-1], data.name);
         }
-        globalTxtData += `\nGenerated Engine v3.54 | Developer: 2/O Renante Fullo | Marine Solutions 2026\n`;
+        globalTxtData += `\nGenerated Engine v4.00 | Marine Navigation Software Solutions 2026\n`;
         document.getElementById('resultBox').style.display = "block";
         map.setView([apLat, apLon], 8); map.invalidateSize();
     }
@@ -429,7 +465,7 @@
     function downloadLocalRecordFile() {
         if (!globalTxtData) { alert("⚠️ Paki-calculate muna bago mag-download."); return; }
         let blob = new Blob([globalTxtData], { type: "text/plain;charset=utf-8" });
-        let link = document.createElement("a"); link.download = `3_Sight_Complete_Fix_Log.txt`;
+        let link = document.createElement("a"); link.download = `3_Sight_Complete_Interval_Fix_Log.txt`;
         link.href = URL.createObjectURL(blob); document.body.appendChild(link); link.click(); document.body.removeChild(link);
     }
 </script>
