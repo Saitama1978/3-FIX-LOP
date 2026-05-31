@@ -286,9 +286,13 @@
 
     function calculateIndividualUTC(dateStr, timeStr, secStr, zdVal) {
         if (!dateStr || !timeStr) return null;
-        let paddedSec = secStr.padStart(2, '0');
-        let localDateTime = new Date(`${dateStr}T${timeStr}:${paddedSec}`);
-        return new Date(localDateTime.getTime() - (zdVal * 60 * 60 * 1000));
+        let [year, month, day] = dateStr.split('-').map(Number);
+        let [hour, minute] = timeStr.split(':').map(Number);
+        let second = parseInt(secStr) || 0;
+        
+        // Pagbuo ng Date Object gamit ang pure UTC reference base sa parameters ng user
+        let localTimestamp = Date.UTC(year, month - 1, day, hour, minute, second);
+        return new Date(localTimestamp - (zdVal * 60 * 60 * 1000));
     }
 
     window.onload = function() {
@@ -402,7 +406,7 @@
             let bodyKey = document.getElementById(`body${i}`).value;
             let dVal = document.getElementById(`date${i}`).value;
             let tVal = document.getElementById(`time${i}`).value;
-            let sVal = document.getElementById(`sec1`).value || "00";
+            let sVal = document.getElementById(`sec${i}`).value || "00";
             let zdVal = parseFloat(document.getElementById(`zd${i}`).value) || 0;
             
             let hsDeg = parseFloat(document.getElementById(`hsDeg${i}`).value) || 0;
@@ -415,7 +419,11 @@
             let displayUTCStr = utcDate.toUTCString().replace("GMT", "UTC");
             
             let data = computeEphemeris(bodyKey, utcDate);
-            let lha = (data.gha + apLon) % 360; if(lha < 0) lha += 360;
+            
+            // LHA mathematical verification boundary loop (0-360)
+            let lha = (data.gha + apLon);
+            while(lha < 0) lha += 360;
+            while(lha >= 360) lha -= 360;
             
             let hs = hsDeg + (hsMin / 60);
             let ha = hs + ie - dip;
