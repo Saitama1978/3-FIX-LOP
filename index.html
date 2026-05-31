@@ -34,12 +34,37 @@
         button { width: 100%; background-color: #5BC0BE; color: #0B132B; border: none; padding: 14px; border-radius: 6px; font-size: 16px; font-weight: bold; margin-top: 20px; cursor: pointer; transition: 0.2s; text-transform: uppercase; letter-spacing: 0.5px; }
         button:hover { background-color: #38BDF8; }
         
+        /* ACTION BUTTONS CONTAINER SETUP */
+        .action-buttons-group { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
+        .btn-save { background-color: #3B82F6; color: white; }
+        .btn-save:hover { background-color: #2563EB; }
+        .btn-print { background-color: #10B981; color: white; }
+        .btn-print:hover { background-color: #059669; }
+
         .report-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 12px; background-color: #0F172A; text-align: center; }
         .report-table th { background-color: #1C2541; color: #38BDF8; padding: 10px; border: 1px solid #3A506B; }
         .report-table td { padding: 8px; border: 1px solid #3A506B; }
         
         #map { width: 100%; height: 420px; margin-top: 15px; border-radius: 8px; border: 2px solid #5BC0BE; }
         .dev-footer { text-align: center; margin-top: 30px; padding-top: 15px; border-top: 1px solid #3A506B; font-size: 12px; color: #64748B; }
+
+        /* PRINT MEDIA CONFIGURATION (Para kapag ipriprint ay magiging formal puting papel layout) */
+        @media print {
+            body { background-color: white !important; color: black !important; padding: 0; margin: 0; }
+            .container { background-color: white !important; color: black !important; box-shadow: none !important; max-width: 100% !important; padding: 0 !important; }
+            h1 { color: #000 !important; border-bottom: 2px solid #000 !important; }
+            h3 { color: #000 !important; border-left: 4px solid #000 !important; page-break-after: avoid; }
+            input, select { background-color: #fff !important; color: #000 !important; border: 1px solid #000 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .sight-card { background-color: #fff !important; color: #000 !important; border: 1px solid #000 !important; border-top: 4px solid !important; page-break-inside: avoid; }
+            .checkbox-container, button, .action-buttons-group, #map { display: none !important; }
+            .report-table { background-color: #fff !important; color: #000 !important; width: 100% !important; }
+            .report-table th { background-color: #f3f4f6 !important; color: #000 !important; border: 1px solid #000 !important; }
+            .report-table td { border: 1px solid #000 !important; color: #000 !important; }
+            .dev-footer { color: #000 !important; border-top: 1px solid #000 !important; page-break-inside: avoid; }
+            .manual-panel { background: #fff !important; border: 1px solid #000 !important; }
+            .sub-entry-box { background: #fff !important; border: 1px solid #ccc !important; border-left: 3px solid #000 !important; }
+            #reportSection { display: block !important; }
+        }
     </style>
 </head>
 <body>
@@ -47,7 +72,6 @@
 <div class="container">
     <h1>⚓ 3-SIGHT CELESTIAL FIX ENGINE <span style="font-size:12px; color:#5BC0BE;">[COMPLETE LIST & SEPARATE MINUTES]</span></h1>
 
-    <!-- LOG & REFERENCE -->
     <h3>📝 Vessel Voyage Log</h3>
     <div class="grid-2">
         <div><label>Vessel Name:</label><input type="text" id="vesselName" value="MV"></div>
@@ -58,7 +82,6 @@
         <div><label>Remarks / Environment:</label><input type="text" id="remarks" value="3-Star Twilight Sight Fix"></div>
     </div>
 
-    <!-- POSITION REFERENCE -->
     <h3>🌐 Assumed Position (AP) - Base Reference</h3>
     <div class="grid-2">
         <div>
@@ -88,12 +111,9 @@
         <label for="manualOverrideToggle" style="margin:0; color:#F59E0B; cursor:pointer; font-weight: bold;">⚠️ ENABLE MANUAL ALMANAC DATA ENTRY FOR ALL ENGINES</label>
     </div>
 
-    <!-- MULTI SIGHT OBSERVATION CHANNELS -->
     <h3>🌌 Multi-Sight Observation Data</h3>
     <div class="sight-container">
         
-        <!-- GENERATING SIGHT CARDS USING MACRO-TEMPLATE FUNCTION PRESETS VIA JAVASCRIPT FOR CODE CLEANLINESS -->
-        <!-- SIGHT #1 -->
         <div class="sight-card s1">
             <div class="sight-title" style="color:#EF4444;">🔴 SIGHT #1</div>
             <label>Body / Target:</label>
@@ -108,11 +128,9 @@
             <label>Index Error (IE):</label>
             <input type="number" id="ie1" value="1.5" step="0.1">
 
-            <!-- MANUAL BOXES PANEL -->
             <div id="manualPanel1" class="manual-panel"></div>
         </div>
 
-        <!-- SIGHT #2 -->
         <div class="sight-card s2">
             <div class="sight-title" style="color:#10B981;">🟢 SIGHT #2</div>
             <label>Body / Target:</label>
@@ -130,7 +148,6 @@
             <div id="manualPanel2" class="manual-panel"></div>
         </div>
 
-        <!-- SIGHT #3 -->
         <div class="sight-card s3">
             <div class="sight-title" style="color:#F59E0B;">🟡 SIGHT #3</div>
             <label>Body / Target:</label>
@@ -151,7 +168,11 @@
 
     <button onclick="calculate3SightIntersectionFix()">Calculate Intersecting LOPs & Plot Fix</button>
 
-    <!-- CALCULATED RESULTS AND CHARTS REPORT -->
+    <div class="action-buttons-group">
+        <button class="btn-save" onclick="saveDataToTXT()">💾 Save Calculation Report (.TXT)</button>
+        <button class="btn-print" onclick="printReport()">🖨️ Print Complete Details</button>
+    </div>
+
     <div id="reportSection" style="display:none;">
         <h3>📊 Automated Sight Reduction Report</h3>
         <table class="report-table">
@@ -183,7 +204,9 @@
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-    // FULL COMPILED DROPDOWN OPTION LIST REFERENCE FOR SOLAR SYSTEM & 57 STARS
+    let lastCalculatedData = null;
+
+    // DROPDOWN DATA
     const bodiesDropdownHTML = `
         <optgroup label="Core Solar System">
             <option value="sun" selected>Sun (Araw)</option>
@@ -216,7 +239,6 @@
         </optgroup>
     `;
 
-    // INJECT TEMPLATE STRUCTURE PARTS DYNAMICALLY TO RETAIN CLEAN CONTROL FIELD STRUCTURES
     function generateManualInputFieldsHTML(id) {
         return `
             <div id="starInput${id}">
@@ -242,7 +264,6 @@
                     </div>
                 </div>
             </div>
-
             <div id="solarInput${id}" style="display:none;">
                 <div class="sub-entry-box" style="border-left-color: #10B981;">
                     <label style="color:#10B981; margin-top:0;">Base Hourly GHA:</label>
@@ -258,7 +279,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="sub-entry-box" style="border-left-color: #F43F5E;">
                 <label style="color:#F43F5E; margin-top:0;">Declination (Dec):</label>
                 <div class="row-inline">
@@ -278,11 +298,9 @@
             document.getElementById('body' + i).innerHTML = bodiesDropdownHTML;
             document.getElementById('manualPanel' + i).innerHTML = generateManualInputFieldsHTML(i);
         }
-        // Set default values distinctive inside selection rows
-        document.getElementById('body1').value = "star_17"; // Sirius
-        document.getElementById('body2').value = "star_16"; // Canopus
-        document.getElementById('body3').value = "star_36"; // Rigil Kent.
-        
+        document.getElementById('body1').value = "star_17"; 
+        document.getElementById('body2').value = "star_16"; 
+        document.getElementById('body3').value = "star_36"; 
         for(let i=1; i<=3; i++) { handleBodyTypeChange(i); }
     }
 
@@ -324,7 +342,6 @@
 
         let tbody = document.getElementById('reportTableBody');
         tbody.innerHTML = "";
-
         let bodiesData = [];
 
         for(let i=1; i<=3; i++) {
@@ -346,15 +363,12 @@
                     let ariesD = parseFloat(document.getElementById('ghaAriesDeg' + i).value) || 0;
                     let ariesM = parseFloat(document.getElementById('ghaAriesMin' + i).value) || 0;
                     let ariesTotal = ariesD + (ariesM/60);
-
                     let incM = parseFloat(document.getElementById('incAriesMin' + i).value) || 0;
                     let incS = parseFloat(document.getElementById('incAriesSec' + i).value) || 0;
                     let incTotal = (incM / 60) + (incS / 3600);
-
                     let shaD = parseFloat(document.getElementById('shaDeg' + i).value) || 0;
                     let shaM = parseFloat(document.getElementById('shaMin' + i).value) || 0;
                     let shaTotal = shaD + (shaM/60);
-
                     finalGHA = (ariesTotal + incTotal + shaTotal) % 360;
                 } else {
                     let solD = parseFloat(document.getElementById('ghaSolDeg' + i).value) || 0;
@@ -362,7 +376,6 @@
                     let solIncM = parseFloat(document.getElementById('incSolMin' + i).value) || 0;
                     finalGHA = solD + (solM/60) + (solIncM/60);
                 }
-                
                 let decD = parseFloat(document.getElementById('decDeg' + i).value) || 0;
                 let decM = parseFloat(document.getElementById('decMin' + i).value) || 0;
                 finalDec = decD + (decM/60);
@@ -391,7 +404,10 @@
             let intercept = (ho - hc) * 60;
             let intDir = intercept >= 0 ? "TOWARDS" : "AWAY";
 
-            bodiesData.push({ name: document.getElementById('body' + i).options[document.getElementById('body' + i).selectedIndex].text, ho: ho, gha: finalGHA, dec: finalDec, lha: lha, hc: hc, intercept: intercept, intDir: intDir, zn: zn });
+            bodiesData.push({ 
+                name: document.getElementById('body' + i).options[document.getElementById('body' + i).selectedIndex].text, 
+                ho: ho, gha: finalGHA, dec: finalDec, lha: lha, hc: hc, intercept: intercept, intDir: intDir, zn: zn 
+            });
         }
 
         bodiesData.forEach((data, index) => {
@@ -412,7 +428,6 @@
             let distDeg = (data.intercept / 60);
             let itpLat = apLat + (distDeg * Math.cos(brngRad));
             let itpLon = apLon + ((distDeg * Math.sin(brngRad)) / Math.cos(apLat * Math.PI / 180));
-
             let lopBrngRad = (data.zn + 90) * Math.PI / 180;
             let lineLength = 2.0; 
             L.polyline([
@@ -423,6 +438,90 @@
 
         map.setView([apLat, apLon], 6);
         map.invalidateSize();
+        lastCalculatedData = bodiesData;
+    }
+
+    // FUNCTION PARA SA PRINTING PROCESS
+    function printReport() {
+        if(!lastCalculatedData) {
+            calculate3SightIntersectionFix();
+        }
+        window.print();
+    }
+
+    // FUNCTION PARA SA PAG-SAVE NG MATALINONG TXT FILE
+    function saveDataToTXT() {
+        if(!lastCalculatedData) {
+            alert("Pakisuyong i-calculate muna ang positions bago i-save.");
+            return;
+        }
+
+        let textContent = "";
+        textContent += "=========================================================\\n";
+        textContent += "             3-SIGHT CELESTIAL FIX ENGINE REPORT        \\n";
+        textContent += "=========================================================\\n\\n";
+        
+        textContent += "📝 VESSEL VOYAGE LOG\\n";
+        textContent += "---------------------------------------------------------\\n";
+        textContent += "Vessel Name: " + document.getElementById('vesselName').value + "\\n";
+        textContent += "Voyage Number: " + document.getElementById('voyageNo').value + "\\n";
+        textContent += "Officer on Watch (OOW): " + document.getElementById('oowName').value + "\\n";
+        textContent += "Remarks / Environment: " + document.getElementById('remarks').value + "\\n\\n";
+
+        textContent += "🌐 ASSUMED POSITION (AP) - BASE REFERENCE\\n";
+        textContent += "---------------------------------------------------------\\n";
+        textContent += "Assumed Latitude: " + document.getElementById('latDeg').value + "° " + document.getElementById('latMin').value + "' " + document.getElementById('latDir').value + "\\n";
+        textContent += "Assumed Longitude: " + document.getElementById('lonDeg').value + "° " + document.getElementById('lonMin').value + "' " + document.getElementById('lonDir').value + "\\n";
+        textContent += "Height of Eye (HOE): " + document.getElementById('hoe').value + " meters\\n";
+        textContent += "Zone Description (ZD): " + document.getElementById('zd').value + "\\n\\n";
+
+        textContent += "🌌 SIGHT OBSERVATION INPUTS\\n";
+        textContent += "---------------------------------------------------------\\n";
+        for(let i=1; i<=3; i++) {
+            let bodySelect = document.getElementById('body' + i);
+            let bodyName = bodySelect.options[bodySelect.selectedIndex].text;
+            textContent += "SIGHT #" + i + " - Target Body: " + bodyName + "\\n";
+            textContent += "  Sextant Altitude (Hs): " + document.getElementById('hsDeg' + i).value + "° " + document.getElementById('hsMin' + i).value + "'\\n";
+            textContent += "  Index Error (IE): " + document.getElementById('ie' + i).value + "'\\n";
+            
+            if(document.getElementById('manualOverrideToggle').checked) {
+                textContent += "  [Manual Almanac Enabled]\\n";
+                if(bodySelect.value.startsWith("star_")) {
+                    textContent += "    GHA Aries (Hourly): " + (document.getElementById('ghaAriesDeg' + i).value || 0) + "° " + (document.getElementById('ghaAriesMin' + i).value || 0) + "'\\n";
+                    textContent += "    Aries Increments: " + (document.getElementById('incAriesMin' + i).value || 0) + "' " + (document.getElementById('incAriesSec' + i).value || 0) + '"\\n';
+                    textContent += "    SHA of Star: " + (document.getElementById('shaDeg' + i).value || 0) + "° " + (document.getElementById('shaMin' + i).value || 0) + "'\\n";
+                } else {
+                    textContent += "    Base Hourly GHA: " + (document.getElementById('ghaSolDeg' + i).value || 0) + "° " + (document.getElementById('ghaSolMin' + i).value || 0) + "'\\n";
+                    textContent += "    GHA Increments + v-corr: " + (document.getElementById('incSolMin' + i).value || 0) + "'\\n";
+                }
+                textContent += "    Declination (Dec): " + (document.getElementById('decDeg' + i).value || 0) + "° " + (document.getElementById('decMin' + i).value || 0) + "' " + document.getElementById('decDir' + i).value + "\\n";
+            }
+            textContent += "\\n";
+        }
+
+        textContent += "📊 AUTOMATED SIGHT REDUCTION RESULTS\\n";
+        textContent += "---------------------------------------------------------\\n";
+        lastCalculatedData.forEach((data, index) => {
+            textContent += "Sight " + (index + 1) + " [" + data.name + "]:\\n";
+            textContent += "  True Ho      : " + data.ho.toFixed(2) + "°\\n";
+            textContent += "  Total GHA    : " + data.gha.toFixed(2) + "°\\n";
+            textContent += "  Declination  : " + Math.abs(data.dec).toFixed(1) + "° " + (data.dec >= 0 ? 'N' : 'S') + "\\n";
+            textContent += "  LHA          : " + data.lha.toFixed(2) + "°\\n";
+            textContent += "  Computed Hc  : " + data.hc.toFixed(2) + "°\\n";
+            textContent += "  Intercept    : " + Math.abs(data.intercept).toFixed(1) + " NM " + data.intDir + "\\n";
+            textContent += "  Azimuth (Zn) : " + data.zn.toFixed(1) + "° T\\n";
+            textContent += "---------------------------------------------------------\\n";
+        });
+
+        textContent += "\\nSystem Application Developed By: 2/O RENANTE FULLO\\n";
+
+        let blob = new Blob([textContent], { type: "text/plain;charset=utf-8" });
+        let link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = "Celestial_Fix_Report_" + (document.getElementById('vesselName').value).replace(/\\s+/g, '_') + "_Voy" + document.getElementById('voyageNo').value + ".txt";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     }
 </script>
 </body>
