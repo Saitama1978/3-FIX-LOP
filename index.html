@@ -40,7 +40,7 @@
         .btn-print { background-color: #10B981; color: white; }
         .btn-print:hover { background-color: #059669; }
         
-        .report-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 12px; background-color: #0F172A; text-align: center; }
+        .report-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 11px; background-color: #0F172A; text-align: center; }
         .report-table th { background-color: #1C2541; color: #38BDF8; padding: 10px; border: 1px solid #3A506B; }
         .report-table td { padding: 8px; border: 1px solid #3A506B; }
         
@@ -54,12 +54,12 @@
             h1, h3 { color: black; border-bottom-color: black; border-left-color: black; }
             input, select, button, .checkbox-container, .sight-container { display: none !important; }
             #reportSection { display: block !important; }
-            .report-table { background-color: white; color: black; border: 1px solid black; }
+            .report-table { background-color: white; color: black; border: 1px solid black; width: 100%; }
             .report-table th, .report-table td { border: 1px solid black; color: black !important; background-color: white !important; }
             #map { border: 1px solid black; height: 350px; page-break-inside: avoid; }
             .print-header-info { display: block !important; margin-bottom: 20px; color: black; }
             .print-header-info table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-            .print-header-info td { padding: 5px; border: 1px solid #ccc; font-size: 14px; }
+            .print-header-info td { padding: 5px; border: 1px solid #ccc; font-size: 13px; }
         }
         .print-header-info { display: none; }
     </style>
@@ -67,8 +67,9 @@
 <body>
 
 <div class="container">
-    <h1>⚓ 3-SIGHT CELESTIAL FIX ENGINE <span style="font-size:12px; color:#5BC0BE;"</h1>
+    <h1>⚓ 3-SIGHT CELESTIAL FIX ENGINE <span style="font-size:12px; color:#5BC0BE;">[COMPLETE LIST & SEPARATE MINUTES]</span></h1>
 
+    <!-- LOG & REFERENCE -->
     <h3>📝 Vessel Voyage Log</h3>
     <div class="grid-2">
         <div><label>Vessel Name:</label><input type="text" id="vesselName" value="MV"></div>
@@ -79,6 +80,7 @@
         <div><label>Remarks / Environment:</label><input type="text" id="remarks" value="3-Star Twilight Sight Fix"></div>
     </div>
 
+    <!-- POSITION REFERENCE -->
     <h3>🌐 Assumed Position (AP) - Base Reference</h3>
     <div class="grid-2">
         <div>
@@ -108,12 +110,22 @@
         <label for="manualOverrideToggle" style="margin:0; color:#F59E0B; cursor:pointer; font-weight: bold;">⚠️ ENABLE MANUAL ALMANAC DATA ENTRY FOR ALL ENGINES</label>
     </div>
 
+    <!-- MULTI SIGHT OBSERVATION CHANNELS -->
     <h3>🌌 Multi-Sight Observation Data</h3>
     <div class="sight-container">
+        <!-- SIGHT #1 -->
         <div class="sight-card s1">
             <div class="sight-title" style="color:#EF4444;">🔴 SIGHT #1</div>
             <label>Body / Target:</label>
             <select id="body1" onchange="handleBodyTypeChange(1)"></select>
+            
+            <!-- ISININGIT NA TIME INPUT SA BABA NG DROPDOWN -->
+            <label>Time of Sight (GMT/LMT):</label>
+            <div class="row-inline">
+                <input type="number" id="timeHour1" value="05" min="0" max="23" placeholder="HH"><span>:</span>
+                <input type="number" id="timeMin1" value="14" min="0" max="59" placeholder="MM"><span>:</span>
+                <input type="number" id="timeSec1" value="25" min="0" max="59" placeholder="SS">
+            </div>
             
             <label>Sextant Altitude (Hs):</label>
             <div class="row-inline">
@@ -127,10 +139,19 @@
             <div id="manualPanel1" class="manual-panel"></div>
         </div>
 
+        <!-- SIGHT #2 -->
         <div class="sight-card s2">
             <div class="sight-title" style="color:#10B981;">🟢 SIGHT #2</div>
             <label>Body / Target:</label>
             <select id="body2" onchange="handleBodyTypeChange(2)"></select>
+            
+            <!-- ISININGIT NA TIME INPUT SA BABA NG DROPDOWN -->
+            <label>Time of Sight (GMT/LMT):</label>
+            <div class="row-inline">
+                <input type="number" id="timeHour2" value="05" min="0" max="23" placeholder="HH"><span>:</span>
+                <input type="number" id="timeMin2" value="16" min="0" max="59" placeholder="MM"><span>:</span>
+                <input type="number" id="timeSec2" value="40" min="0" max="59" placeholder="SS">
+            </div>
             
             <label>Sextant Altitude (Hs):</label>
             <div class="row-inline">
@@ -144,10 +165,19 @@
             <div id="manualPanel2" class="manual-panel"></div>
         </div>
 
+        <!-- SIGHT #3 -->
         <div class="sight-card s3">
             <div class="sight-title" style="color:#F59E0B;">🟡 SIGHT #3</div>
             <label>Body / Target:</label>
             <select id="body3" onchange="handleBodyTypeChange(3)"></select>
+            
+            <!-- ISININGIT NA TIME INPUT SA BABA NG DROPDOWN -->
+            <label>Time of Sight (GMT/LMT):</label>
+            <div class="row-inline">
+                <input type="number" id="timeHour3" value="05" min="0" max="23" placeholder="HH"><span>:</span>
+                <input type="number" id="timeMin3" value="18" min="0" max="59" placeholder="MM"><span>:</span>
+                <input type="number" id="timeSec3" value="12" min="0" max="59" placeholder="SS">
+            </div>
             
             <label>Sextant Altitude (Hs):</label>
             <div class="row-inline">
@@ -164,8 +194,10 @@
 
     <button onclick="calculate3SightIntersectionFix()">Calculate Intersecting LOPs & Plot Fix</button>
 
+    <!-- PRINT ONLY DYNAMIC CONTAINER INFO -->
     <div class="print-header-info" id="printHeaderData"></div>
 
+    <!-- CALCULATED RESULTS AND CHARTS REPORT -->
     <div id="reportSection" style="display:none;">
         <h3>📊 Automated Sight Reduction Report</h3>
         <table class="report-table">
@@ -173,6 +205,7 @@
                 <tr>
                     <th>Sight</th>
                     <th>Target Body</th>
+                    <th>Time</th>
                     <th>True Ho</th>
                     <th>Total GHA</th>
                     <th>Declination</th>
@@ -289,7 +322,7 @@
 
     let map = null;
     let layerGroup = null;
-    let globalCalculatedData = null; // Taga-imbak ng data para sa Save/Print
+    let globalCalculatedData = null;
 
     window.onload = function() {
         for(let i=1; i<=3; i++) {
@@ -321,6 +354,10 @@
             starPanel.style.display = isStar ? "block" : "none";
             solarPanel.style.display = isStar ? "none" : "block";
         }
+    }
+
+    function padZero(num) {
+        return num.toString().padStart(2, '0');
     }
 
     function calculate3SightIntersectionFix() {
@@ -359,6 +396,12 @@
             let bodyVal = bodySelect.value;
             let bodyName = bodySelect.options[bodySelect.selectedIndex].text;
             let isStar = bodyVal.startsWith("star_");
+            
+            // Kuhanin ang Time details bawat Sight card
+            let h = padZero(parseInt(document.getElementById('timeHour' + i).value) || 0);
+            let m = padZero(parseInt(document.getElementById('timeMin' + i).value) || 0);
+            let s = padZero(parseInt(document.getElementById('timeSec' + i).value) || 0);
+            let timeStr = `${h}:${m}:${s}`;
             
             let finalGHA = 0;
             let finalDec = 0;
@@ -421,7 +464,7 @@
             let intDir = intercept >= 0 ? "TOWARDS" : "AWAY";
 
             bodiesData.push({ 
-                id: i, name: bodyName, hs: hs, ie: ie*60, ho: ho, gha: finalGHA, 
+                id: i, name: bodyName, time: timeStr, hs: hs, ie: ie*60, ho: ho, gha: finalGHA, 
                 dec: finalDec, lha: lha, hc: hc, intercept: intercept, intDir: intDir, zn: zn 
             });
         }
@@ -430,6 +473,7 @@
             let row = `<tr>
                 <td>Sight ${index+1}</td>
                 <td><b>${data.name}</b></td>
+                <td style="color:#38BDF8; font-weight:bold;">${data.time}</td>
                 <td>${data.ho.toFixed(2)}°</td>
                 <td>${data.gha.toFixed(2)}°</td>
                 <td>${Math.abs(data.dec).toFixed(1)}° ${data.dec>=0?'N':'S'}</td>
@@ -456,7 +500,6 @@
         map.setView([apLat, apLon], 6);
         map.invalidateSize();
 
-        // I-save ang calculated details sa global variable para sa export
         globalCalculatedData = {
             vesselName: document.getElementById('vesselName').value,
             voyageNo: document.getElementById('voyageNo').value,
@@ -496,6 +539,7 @@
 
         d.sights.forEach((s) => {
             text += `\n[SIGHT #${s.id} - ${s.name}]\n`;
+            text += `  Time of Sight: ${s.time}\n`;
             text += `  Sextant Hs  : ${s.hs.toFixed(4)}°\n`;
             text += `  Index Error : ${s.ie.toFixed(1)}'\n`;
             text += `  Observed Ho : ${s.ho.toFixed(4)}°\n`;
@@ -525,7 +569,6 @@
         }
 
         let d = globalCalculatedData;
-        // Gumawa ng malinis na header table para makita sa print layout
         let htmlHeader = `
             <h2>⚓ CELESTIAL SIGHT REDUCTION WORK SHEET</h2>
             <table>
@@ -547,8 +590,6 @@
             </table>
         `;
         document.getElementById('printHeaderData').innerHTML = htmlHeader;
-        
-        // I-trigger ang print dialog
         window.print();
     }
 </script>
