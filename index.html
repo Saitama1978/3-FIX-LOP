@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3-SIGHT CELESTIAL FIX ENGINE (SEPARATE MIN/DEG)</title>
+    <title>3-SIGHT CELESTIAL FIX ENGINE (COMPLETE BODIES)</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: #0B132B; color: #E2E8F0; padding: 15px; margin: 0; }
-        .container { max-width: 950px; margin: 0 auto; background-color: #1C2541; padding: 20px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.6); }
+        .container { max-width: 1000px; margin: 0 auto; background-color: #1C2541; padding: 20px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.6); }
         h1 { text-align: center; color: #38BDF8; font-size: 24px; font-weight: 800; border-bottom: 2px solid #3A506B; padding-bottom: 12px; margin-top: 0; letter-spacing: 1px; }
         h3 { color: #5BC0BE; border-left: 4px solid #5BC0BE; padding-left: 8px; margin-top: 20px; font-size: 16px; text-transform: uppercase; }
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
@@ -17,7 +17,7 @@
         .row-inline { display: flex; gap: 5px; align-items: center; }
         .row-inline span { font-size: 12px; color: #94A3B8; }
         
-        /* SIGHT CARDS */
+        /* SIGHT CARDS CHANNELS */
         .sight-container { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-top: 15px; }
         .sight-card { padding: 12px; border-radius: 8px; border-top: 4px solid; background-color: #0B132B; }
         .sight-card.s1 { border-top-color: #EF4444; }
@@ -45,8 +45,9 @@
 <body>
 
 <div class="container">
-    <h1>⚓ 3-SIGHT CELESTIAL FIX ENGINE <span style="font-size:12px; color:#5BC0BE;">[PURE SEPARATE MINUTES]</span></h1>
+    <h1>⚓ 3-SIGHT CELESTIAL FIX ENGINE <span style="font-size:12px; color:#5BC0BE;">[COMPLETE LIST & SEPARATE MINUTES]</span></h1>
 
+    <!-- LOG & REFERENCE -->
     <h3>📝 Vessel Voyage Log</h3>
     <div class="grid-2">
         <div><label>Vessel Name:</label><input type="text" id="vesselName" value="MV"></div>
@@ -57,6 +58,7 @@
         <div><label>Remarks / Environment:</label><input type="text" id="remarks" value="3-Star Twilight Sight Fix"></div>
     </div>
 
+    <!-- POSITION REFERENCE -->
     <h3>🌐 Assumed Position (AP) - Base Reference</h3>
     <div class="grid-2">
         <div>
@@ -83,227 +85,75 @@
 
     <div class="checkbox-container">
         <input type="checkbox" id="manualOverrideToggle" onchange="toggleManualOverride()">
-        <label for="manualOverrideToggle" style="margin:0; color:#F59E0B; cursor:pointer; font-weight: bold;">⚠️ ENABLE MANUAL ALMANAC DATA ENTRY (NO MANUAL MINUTE-TO-DEGREE CALCULATIONS)</label>
+        <label for="manualOverrideToggle" style="margin:0; color:#F59E0B; cursor:pointer; font-weight: bold;">⚠️ ENABLE MANUAL ALMANAC DATA ENTRY FOR ALL ENGINES</label>
     </div>
 
+    <!-- MULTI SIGHT OBSERVATION CHANNELS -->
     <h3>🌌 Multi-Sight Observation Data</h3>
     <div class="sight-container">
         
+        <!-- GENERATING SIGHT CARDS USING MACRO-TEMPLATE FUNCTION PRESETS VIA JAVASCRIPT FOR CODE CLEANLINESS -->
+        <!-- SIGHT #1 -->
         <div class="sight-card s1">
             <div class="sight-title" style="color:#EF4444;">🔴 SIGHT #1</div>
             <label>Body / Target:</label>
-            <select id="body1" onchange="handleBodyTypeChange(1)">
-                <option value="star" selected>Antares (Star)</option>
-                <option value="sun">Sun</option>
-                <option value="planet">Planet</option>
-            </select>
+            <select id="body1" onchange="handleBodyTypeChange(1)"></select>
             
             <label>Sextant Altitude (Hs):</label>
             <div class="row-inline">
-                <input type="number" id="hsDeg1" value="40" placeholder="Deg"><span>°</span>
-                <input type="number" id="hsMin1" value="00.0" step="0.1" placeholder="Min"><span>'</span>
+                <input type="number" id="hsDeg1" value="45" placeholder="Deg"><span>°</span>
+                <input type="number" id="hsMin1" value="12.5" step="0.1" placeholder="Min"><span>'</span>
             </div>
             
             <label>Index Error (IE):</label>
-            <input type="number" id="ie1" value="1.5" step="0.1" placeholder="Minutes">
+            <input type="number" id="ie1" value="1.5" step="0.1">
 
-            <div id="manualPanel1" class="manual-panel">
-                <div id="starInput1">
-                    <div class="sub-entry-box">
-                        <label style="color:#38BDF8; margin-top:0;">GHA Aries (Hourly):</label>
-                        <div class="row-inline">
-                            <input type="number" id="ghaAriesDeg1" placeholder="Deg"><span>°</span>
-                            <input type="number" id="ghaAriesMin1" placeholder="Min" step="0.1"><span>'</span>
-                        </div>
-                    </div>
-                    <div class="sub-entry-box" style="border-left-color: #A78BFA;">
-                        <label style="color:#A78BFA; margin-top:0;">Aries Increments (Min/Sec):</label>
-                        <div class="row-inline">
-                            <input type="number" id="incAriesMin1" placeholder="Min"><span>'</span>
-                            <input type="number" id="incAriesSec1" placeholder="Sec" step="0.1"><span>"</span>
-                        </div>
-                    </div>
-                    <div class="sub-entry-box" style="border-left-color: #F59E0B;">
-                        <label style="color:#F59E0B; margin-top:0;">SHA of Star:</label>
-                        <div class="row-inline">
-                            <input type="number" id="shaDeg1" placeholder="Deg"><span>°</span>
-                            <input type="number" id="shaMin1" placeholder="Min" step="0.1"><span>'</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="solarInput1" style="display:none;">
-                    <div class="sub-entry-box" style="border-left-color: #10B981;">
-                        <label style="color:#10B981; margin-top:0;">Base Hourly GHA:</label>
-                        <div class="row-inline">
-                            <input type="number" id="ghaSolDeg1" placeholder="Deg"><span>°</span>
-                            <input type="number" id="ghaSolMin1" placeholder="Min" step="0.1"><span>'</span>
-                        </div>
-                    </div>
-                    <div class="sub-entry-box" style="border-left-color: #34D399;">
-                        <label style="color:#34D399; margin-top:0;">GHA Increments + v:</label>
-                        <div class="row-inline">
-                            <input type="number" id="incSolMin1" placeholder="Min"><span>'</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="sub-entry-box" style="border-left-color: #F43F5E;">
-                    <label style="color:#F43F5E; margin-top:0;">Declination (Dec):</label>
-                    <div class="row-inline">
-                        <input type="number" id="decDeg1" placeholder="Deg"><span>°</span>
-                        <input type="number" id="decMin1" placeholder="Min" step="0.1"><span>'</span>
-                        <select id="decDir1" style="width:65px; margin-top:0;"><option value="N">N</option><option value="S">S</option></select>
-                    </div>
-                </div>
-            </div>
+            <!-- MANUAL BOXES PANEL -->
+            <div id="manualPanel1" class="manual-panel"></div>
         </div>
 
+        <!-- SIGHT #2 -->
         <div class="sight-card s2">
             <div class="sight-title" style="color:#10B981;">🟢 SIGHT #2</div>
             <label>Body / Target:</label>
-            <select id="body2" onchange="handleBodyTypeChange(2)">
-                <option value="star" selected>Hadar (Star)</option>
-                <option value="sun">Sun</option>
-                <option value="planet">Planet</option>
-            </select>
+            <select id="body2" onchange="handleBodyTypeChange(2)"></select>
             
             <label>Sextant Altitude (Hs):</label>
             <div class="row-inline">
-                <input type="number" id="hsDeg2" value="20" placeholder="Deg"><span>°</span>
-                <input type="number" id="hsMin2" value="48.0" step="0.1" placeholder="Min"><span>'</span>
+                <input type="number" id="hsDeg2" value="38" placeholder="Deg"><span>°</span>
+                <input type="number" id="hsMin2" value="40.2" step="0.1" placeholder="Min"><span>'</span>
             </div>
             
             <label>Index Error (IE):</label>
-            <input type="number" id="ie2" value="1.5" step="0.1" placeholder="Minutes">
+            <input type="number" id="ie2" value="1.5" step="0.1">
 
-            <div id="manualPanel2" class="manual-panel">
-                <div id="starInput2">
-                    <div class="sub-entry-box">
-                        <label style="color:#38BDF8; margin-top:0;">GHA Aries (Hourly):</label>
-                        <div class="row-inline">
-                            <input type="number" id="ghaAriesDeg2" placeholder="Deg"><span>°</span>
-                            <input type="number" id="ghaAriesMin2" placeholder="Min" step="0.1"><span>'</span>
-                        </div>
-                    </div>
-                    <div class="sub-entry-box" style="border-left-color: #A78BFA;">
-                        <label style="color:#A78BFA; margin-top:0;">Aries Increments (Min/Sec):</label>
-                        <div class="row-inline">
-                            <input type="number" id="incAriesMin2" placeholder="Min"><span>'</span>
-                            <input type="number" id="incAriesSec2" placeholder="Sec" step="0.1"><span>"</span>
-                        </div>
-                    </div>
-                    <div class="sub-entry-box" style="border-left-color: #F59E0B;">
-                        <label style="color:#F59E0B; margin-top:0;">SHA of Star:</label>
-                        <div class="row-inline">
-                            <input type="number" id="shaDeg2" placeholder="Deg"><span>°</span>
-                            <input type="number" id="shaMin2" placeholder="Min" step="0.1"><span>'</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="solarInput2" style="display:none;">
-                    <div class="sub-entry-box" style="border-left-color: #10B981;">
-                        <label style="color:#10B981; margin-top:0;">Base Hourly GHA:</label>
-                        <div class="row-inline">
-                            <input type="number" id="ghaSolDeg2" placeholder="Deg"><span>°</span>
-                            <input type="number" id="ghaSolMin2" placeholder="Min" step="0.1"><span>'</span>
-                        </div>
-                    </div>
-                    <div class="sub-entry-box" style="border-left-color: #34D399;">
-                        <label style="color:#34D399; margin-top:0;">GHA Increments + v:</label>
-                        <div class="row-inline">
-                            <input type="number" id="incSolMin2" placeholder="Min"><span>'</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="sub-entry-box" style="border-left-color: #F43F5E;">
-                    <label style="color:#F43F5E; margin-top:0;">Declination (Dec):</label>
-                    <div class="row-inline">
-                        <input type="number" id="decDeg2" placeholder="Deg"><span>°</span>
-                        <input type="number" id="decMin2" placeholder="Min" step="0.1"><span>'</span>
-                        <select id="decDir2" style="width:65px; margin-top:0;"><option value="N">N</option><option value="S">S</option></select>
-                    </div>
-                </div>
-            </div>
+            <div id="manualPanel2" class="manual-panel"></div>
         </div>
 
+        <!-- SIGHT #3 -->
         <div class="sight-card s3">
             <div class="sight-title" style="color:#F59E0B;">🟡 SIGHT #3</div>
             <label>Body / Target:</label>
-            <select id="body3" onchange="handleBodyTypeChange(3)">
-                <option value="star" selected>Regulus (Star)</option>
-                <option value="sun">Sun</option>
-                <option value="planet">Planet</option>
-            </select>
+            <select id="body3" onchange="handleBodyTypeChange(3)"></select>
             
             <label>Sextant Altitude (Hs):</label>
             <div class="row-inline">
-                <input type="number" id="hsDeg3" value="28" placeholder="Deg"><span>°</span>
-                <input type="number" id="hsMin3" value="06.0" step="0.1" placeholder="Min"><span>'</span>
+                <input type="number" id="hsDeg3" value="52" placeholder="Deg"><span>°</span>
+                <input type="number" id="hsMin3" value="18.0" step="0.1" placeholder="Min"><span>'</span>
             </div>
             
             <label>Index Error (IE):</label>
-            <input type="number" id="ie3" value="1.5" step="0.1" placeholder="Minutes">
+            <input type="number" id="ie3" value="1.5" step="0.1">
 
-            <div id="manualPanel3" class="manual-panel">
-                <div id="starInput3">
-                    <div class="sub-entry-box">
-                        <label style="color:#38BDF8; margin-top:0;">GHA Aries (Hourly):</label>
-                        <div class="row-inline">
-                            <input type="number" id="ghaAriesDeg3" placeholder="Deg"><span>°</span>
-                            <input type="number" id="ghaAriesMin3" placeholder="Min" step="0.1"><span>'</span>
-                        </div>
-                    </div>
-                    <div class="sub-entry-box" style="border-left-color: #A78BFA;">
-                        <label style="color:#A78BFA; margin-top:0;">Aries Increments (Min/Sec):</label>
-                        <div class="row-inline">
-                            <input type="number" id="incAriesMin3" placeholder="Min"><span>'</span>
-                            <input type="number" id="incAriesSec3" placeholder="Sec" step="0.1"><span>"</span>
-                        </div>
-                    </div>
-                    <div class="sub-entry-box" style="border-left-color: #F59E0B;">
-                        <label style="color:#F59E0B; margin-top:0;">SHA of Star:</label>
-                        <div class="row-inline">
-                            <input type="number" id="shaDeg3" placeholder="Deg"><span>°</span>
-                            <input type="number" id="shaMin3" placeholder="Min" step="0.1"><span>'</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="solarInput3" style="display:none;">
-                    <div class="sub-entry-box" style="border-left-color: #10B981;">
-                        <label style="color:#10B981; margin-top:0;">Base Hourly GHA:</label>
-                        <div class="row-inline">
-                            <input type="number" id="ghaSolDeg3" placeholder="Deg"><span>°</span>
-                            <input type="number" id="ghaSolMin3" placeholder="Min" step="0.1"><span>'</span>
-                        </div>
-                    </div>
-                    <div class="sub-entry-box" style="border-left-color: #34D399;">
-                        <label style="color:#34D399; margin-top:0;">GHA Increments + v:</label>
-                        <div class="row-inline">
-                            <input type="number" id="incSolMin3" placeholder="Min"><span>'</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="sub-entry-box" style="border-left-color: #F43F5E;">
-                    <label style="color:#F43F5E; margin-top:0;">Declination (Dec):</label>
-                    <div class="row-inline">
-                        <input type="number" id="decDeg3" placeholder="Deg"><span>°</span>
-                        <input type="number" id="decMin3" placeholder="Min" step="0.1"><span>'</span>
-                        <select id="decDir3" style="width:65px; margin-top:0;"><option value="N">N</option><option value="S">S</option></select>
-                    </div>
-                </div>
-            </div>
+            <div id="manualPanel3" class="manual-panel"></div>
         </div>
     </div>
 
     <button onclick="calculate3SightIntersectionFix()">Calculate Intersecting LOPs & Plot Fix</button>
 
+    <!-- CALCULATED RESULTS AND CHARTS REPORT -->
     <div id="reportSection" style="display:none;">
-        <h3>📊 Automated Sight Reduction Report (Separate Entry Check)</h3>
+        <h3>📊 Automated Sight Reduction Report</h3>
         <table class="report-table">
             <thead>
                 <tr>
@@ -333,8 +183,108 @@
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
+    // FULL COMPILED DROPDOWN OPTION LIST REFERENCE FOR SOLAR SYSTEM & 57 STARS
+    const bodiesDropdownHTML = `
+        <optgroup label="Core Solar System">
+            <option value="sun" selected>Sun (Araw)</option>
+            <option value="venus">Venus</option>
+            <option value="mars">Mars</option>
+            <option value="jupiter">Jupiter</option>
+            <option value="saturn">Saturn</option>
+            <option value="moon">Moon</option>
+        </optgroup>
+        <optgroup label="57 Navigational Stars">
+            <option value="star_1">1. Alpheratz</option><option value="star_2">2. Ankaa</option><option value="star_3">3. Schedar</option>
+            <option value="star_4">4. Diphda</option><option value="star_5">5. Achernar</option><option value="star_6">6. Hamal</option>
+            <option value="star_7">7. Acamar</option><option value="star_8">8. Menkar</option><option value="star_9">9. Mirfak</option>
+            <option value="star_10">10. Aldebaran</option><option value="star_11">11. Rigel</option><option value="star_12">12. Bellatrix</option>
+            <option value="star_13">13. Elnath</option><option value="star_14">14. Alnilam</option><option value="star_15">15. Betelgeuse</option>
+            <option value="star_16">16. Canopus</option><option value="star_17">17. Sirius</option><option value="star_18">18. Adhara</option>
+            <option value="star_19">19. Procyon</option><option value="star_20">20. Pollux</option><option value="star_21">21. Avior</option>
+            <option value="star_22">22. Regulus</option><option value="star_23">23. Kaustraat</option><option value="star_24">24. Alphard</option>
+            <option value="star_25">25. Regor</option><option value="star_26">26. Denebola</option><option value="star_27">27. Gienah</option>
+            <option value="star_28">28. Acrux</option><option value="star_29">29. Gacrux</option><option value="star_30">30. Alioth</option>
+            <option value="star_31">31. Spica</option><option value="star_32">32. Alkaid</option><option value="star_33">33. Hadar</option>
+            <option value="star_34">34. Menkent</option><option value="star_35">35. Arcturus</option><option value="star_36">36. Rigil Kent.</option>
+            <option value="star_37">37. Kochab</option><option value="star_38">38. Zubenelg.</option><option value="star_39">39. Alphecca</option>
+            <option value="star_40">40. Antares</option><option value="star_41">41. Atria</option><option value="star_42">42. Sabik</option>
+            <option value="star_43">43. Shaula</option><option value="star_44">44. Rasalhague</option><option value="star_45">45. Etamin</option>
+            <option value="star_46">46. Kaus Austr.</option><option value="star_47">47. Vega</option><option value="star_48">48. Nunki</option>
+            <option value="star_49">49. Altair</option><option value="star_50">50. Peacock</option><option value="star_51">51. Deneb</option>
+            <option value="star_52">52. Enif</option><option value="star_53">53. Al Na'ir</option><option value="star_54">54. Fomalhaut</option>
+            <option value="star_55">55. Scheat</option><option value="star_56">56. Markab</option><option value="star_57">57. Polaris</option>
+        </optgroup>
+    `;
+
+    // INJECT TEMPLATE STRUCTURE PARTS DYNAMICALLY TO RETAIN CLEAN CONTROL FIELD STRUCTURES
+    function generateManualInputFieldsHTML(id) {
+        return `
+            <div id="starInput${id}">
+                <div class="sub-entry-box">
+                    <label style="color:#38BDF8; margin-top:0;">GHA Aries (Hourly):</label>
+                    <div class="row-inline">
+                        <input type="number" id="ghaAriesDeg${id}" placeholder="Deg"><span>°</span>
+                        <input type="number" id="ghaAriesMin${id}" placeholder="Min" step="0.1"><span>'</span>
+                    </div>
+                </div>
+                <div class="sub-entry-box" style="border-left-color: #A78BFA;">
+                    <label style="color:#A78BFA; margin-top:0;">Aries Increments (Min/Sec):</label>
+                    <div class="row-inline">
+                        <input type="number" id="incAriesMin${id}" placeholder="Min"><span>'</span>
+                        <input type="number" id="incAriesSec${id}" placeholder="Sec" step="0.1"><span>"</span>
+                    </div>
+                </div>
+                <div class="sub-entry-box" style="border-left-color: #F59E0B;">
+                    <label style="color:#F59E0B; margin-top:0;">SHA of Star:</label>
+                    <div class="row-inline">
+                        <input type="number" id="shaDeg${id}" placeholder="Deg"><span>°</span>
+                        <input type="number" id="shaMin${id}" placeholder="Min" step="0.1"><span>'</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="solarInput${id}" style="display:none;">
+                <div class="sub-entry-box" style="border-left-color: #10B981;">
+                    <label style="color:#10B981; margin-top:0;">Base Hourly GHA:</label>
+                    <div class="row-inline">
+                        <input type="number" id="ghaSolDeg${id}" placeholder="Deg"><span>°</span>
+                        <input type="number" id="ghaSolMin${id}" placeholder="Min" step="0.1"><span>'</span>
+                    </div>
+                </div>
+                <div class="sub-entry-box" style="border-left-color: #34D399;">
+                    <label style="color:#34D399; margin-top:0;">GHA Increments + v-corr:</label>
+                    <div class="row-inline">
+                        <input type="number" id="incSolMin${id}" placeholder="Min" step="0.1"><span>'</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sub-entry-box" style="border-left-color: #F43F5E;">
+                <label style="color:#F43F5E; margin-top:0;">Declination (Dec):</label>
+                <div class="row-inline">
+                    <input type="number" id="decDeg${id}" placeholder="Deg"><span>°</span>
+                    <input type="number" id="decMin${id}" placeholder="Min" step="0.1"><span>'</span>
+                    <select id="decDir${id}" style="width:65px; margin-top:0;"><option value="N">N</option><option value="S">S</option></select>
+                </div>
+            </div>
+        `;
+    }
+
     let map = null;
     let layerGroup = null;
+
+    window.onload = function() {
+        for(let i=1; i<=3; i++) {
+            document.getElementById('body' + i).innerHTML = bodiesDropdownHTML;
+            document.getElementById('manualPanel' + i).innerHTML = generateManualInputFieldsHTML(i);
+        }
+        // Set default values distinctive inside selection rows
+        document.getElementById('body1').value = "star_17"; // Sirius
+        document.getElementById('body2').value = "star_16"; // Canopus
+        document.getElementById('body3').value = "star_36"; // Rigil Kent.
+        
+        for(let i=1; i<=3; i++) { handleBodyTypeChange(i); }
+    }
 
     function toggleManualOverride() {
         let isChecked = document.getElementById('manualOverrideToggle').checked;
@@ -344,15 +294,16 @@
     }
 
     function handleBodyTypeChange(id) {
-        let type = document.getElementById('body' + id).value;
-        document.getElementById('starInput' + id).style.display = (type === 'star') ? "block" : "none";
-        document.getElementById('solarInput' + id).style.display = (type !== 'star') ? "block" : "none";
+        let val = document.getElementById('body' + id).value;
+        let isStar = val.startsWith("star_");
+        document.getElementById('starInput' + id).style.display = isStar ? "block" : "none";
+        document.getElementById('solarInput' + id).style.display = isStar ? "none" : "block";
     }
 
     function calculate3SightIntersectionFix() {
         document.getElementById('reportSection').style.display = "block";
         if(!map) {
-            map = L.map('map').setView([8.75, 123.75], 8);
+            map = L.map('map').setView([14.5, 123.75], 8);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
             layerGroup = L.layerGroup().addTo(map);
         } else {
@@ -377,7 +328,8 @@
         let bodiesData = [];
 
         for(let i=1; i<=3; i++) {
-            let bodyType = document.getElementById('body' + i).value;
+            let bodyVal = document.getElementById('body' + i).value;
+            let isStar = bodyVal.startsWith("star_");
             let finalGHA = 0;
             let finalDec = 0;
             
@@ -387,10 +339,10 @@
             let ie = (parseFloat(document.getElementById('ie' + i).value) || 0) / 60;
             let hoe = parseFloat(document.getElementById('hoe').value) || 0;
             let dip = (1.76 * Math.sqrt(hoe)) / 60;
-            let ho = hs - ie - dip; 
+            let ho = hs - ie - dip;
 
             if(document.getElementById('manualOverrideToggle').checked) {
-                if(bodyType === 'star') {
+                if(isStar) {
                     let ariesD = parseFloat(document.getElementById('ghaAriesDeg' + i).value) || 0;
                     let ariesM = parseFloat(document.getElementById('ghaAriesMin' + i).value) || 0;
                     let ariesTotal = ariesD + (ariesM/60);
@@ -404,27 +356,21 @@
                     let shaTotal = shaD + (shaM/60);
 
                     finalGHA = (ariesTotal + incTotal + shaTotal) % 360;
-
-                    let decD = parseFloat(document.getElementById('decDeg' + i).value) || 0;
-                    let decM = parseFloat(document.getElementById('decMin' + i).value) || 0;
-                    finalDec = decD + (decM/60);
-                    if(document.getElementById('decDir' + i).value === 'S') finalDec = -finalDec;
                 } else {
                     let solD = parseFloat(document.getElementById('ghaSolDeg' + i).value) || 0;
                     let solM = parseFloat(document.getElementById('ghaSolMin' + i).value) || 0;
-                    let solInc = parseFloat(document.getElementById('incSolMin' + i).value) || 0;
-                    finalGHA = solD + (solM/60) + (solInc/60);
-
-                    let decD = parseFloat(document.getElementById('decDeg' + i).value) || 0;
-                    let decM = parseFloat(document.getElementById('decMin' + i).value) || 0;
-                    finalDec = decD + (decM/60);
-                    if(document.getElementById('decDir' + i).value === 'S') finalDec = -finalDec;
+                    let solIncM = parseFloat(document.getElementById('incSolMin' + i).value) || 0;
+                    finalGHA = solD + (solM/60) + (solIncM/60);
                 }
+                
+                let decD = parseFloat(document.getElementById('decDeg' + i).value) || 0;
+                let decM = parseFloat(document.getElementById('decMin' + i).value) || 0;
+                finalDec = decD + (decM/60);
+                if(document.getElementById('decDir' + i).value === 'S') finalDec = -finalDec;
             } else {
-                // Hardcoded data reference patterns from screenshot records
-                if(i===1) { finalGHA = 199.95; finalDec = -26.40; }
-                if(i===2) { finalGHA = 237.92; finalDec = -60.40; }
-                if(i===3) { finalGHA = 299.36; finalDec = 12.00; }
+                if(i===1) { finalGHA = 174.50; finalDec = -16.70; }
+                if(i===2) { finalGHA = 182.84; finalDec = -52.72; }
+                if(i===3) { finalGHA = 37.84;  finalDec = -60.83; }
             }
 
             let lha = (lonDir === 'E') ? (finalGHA + apLon) : (finalGHA - Math.abs(apLon));
@@ -452,11 +398,11 @@
             let row = `<tr>
                 <td>Sight ${index+1}</td>
                 <td><b>${data.name}</b></td>
-                <td>${data.ho.toFixed(4)}°</td>
+                <td>${data.ho.toFixed(2)}°</td>
                 <td>${data.gha.toFixed(2)}°</td>
                 <td>${Math.abs(data.dec).toFixed(1)}° ${data.dec>=0?'N':'S'}</td>
                 <td>${data.lha.toFixed(2)}°</td>
-                <td>${data.hc.toFixed(4)}°</td>
+                <td>${data.hc.toFixed(2)}°</td>
                 <td style="color:#10B981; font-weight:bold;">${Math.abs(data.intercept).toFixed(1)} NM ${data.intDir}</td>
                 <td style="color:#F59E0B; font-weight:bold;">${data.zn.toFixed(1)}° T</td>
             </tr>`;
@@ -468,14 +414,14 @@
             let itpLon = apLon + ((distDeg * Math.sin(brngRad)) / Math.cos(apLat * Math.PI / 180));
 
             let lopBrngRad = (data.zn + 90) * Math.PI / 180;
-            let lineLength = 2.5; 
+            let lineLength = 2.0; 
             L.polyline([
                 [itpLat + Math.cos(lopBrngRad)*lineLength, itpLon + (Math.sin(lopBrngRad)*lineLength)/Math.cos(itpLat * Math.PI / 180)],
                 [itpLat - Math.cos(lopBrngRad)*lineLength, itpLon - (Math.sin(lopBrngRad)*lineLength)/Math.cos(itpLat * Math.PI / 180)]
             ], {color: (index===0?'#EF4444':index===1?'#10B981':'#F59E0B'), weight: 3}).addTo(layerGroup);
         });
 
-        map.setView([apLat, apLon], 7);
+        map.setView([apLat, apLon], 6);
         map.invalidateSize();
     }
 </script>
