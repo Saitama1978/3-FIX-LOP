@@ -8,7 +8,7 @@
     <style>
         /* WEB SCREEN DEFAULT STYLE */
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: #0F172A; color: #E2E8F0; padding: 15px; margin: 0; }
-        .container { max-width: 900px; margin: 0 auto; background-color: #1E293B; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        .container { max-width: 1000px; margin: 0 auto; background-color: #1E293B; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
         h1 { text-align: center; color: #38BDF8; font-size: 26px; font-weight: 800; border-bottom: 2px solid #334155; padding-bottom: 12px; margin-top: 0; letter-spacing: 1px; }
         h3 { color: #0EA5E9; border-left: 4px solid #0EA5E9; padding-left: 8px; margin-top: 20px; font-size: 16px; margin-bottom: 10px; }
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
@@ -16,7 +16,7 @@
         label { display: block; margin-top: 10px; font-size: 13px; color: #94A3B8; font-weight: bold; }
         input, select { width: 100%; padding: 10px; margin-top: 5px; background-color: #334155; border: 1px solid #475569; border-radius: 6px; color: white; font-size: 15px; box-sizing: border-box; }
         input:focus, select:focus { border-color: #38BDF8; outline: none; }
-        .row-inline { display: flex; gap: 10px; align-items: center; }
+        .row-inline { display: flex; gap: 5px; align-items: center; }
         button { width: 100%; background-color: #0EA5E9; color: #0F172A; border: none; padding: 14px; border-radius: 6px; font-size: 16px; font-weight: bold; margin-top: 25px; cursor: pointer; transition: 0.2s; }
         button:hover { background-color: #38BDF8; }
         .btn-secondary { background-color: #475569; color: white; margin-top: 12px; padding: 10px; }
@@ -38,22 +38,15 @@
         .dev-footer { text-align: center; margin-top: 30px; padding-top: 15px; border-top: 1px solid #334155; font-size: 12px; color: #64748B; }
         .dev-name { color: #F59E0B; font-weight: bold; font-size: 14px; letter-spacing: 0.5px; margin-top: 3px; }
 
-        /* PRINT MANAGEMENT AREA - FORCES EVERYTHING INTO A SINGLE COMPACT 1/1 HIGH-QUALITY LOG */
+        /* PRINT MANAGEMENT AREA */
         @media print {
             html, body { background: #ffffff !important; background-color: #ffffff !important; color: #000000 !important; padding: 0 !important; margin: 0 !important; font-size: 11px !important; }
             .container { box-shadow: none !important; background: #ffffff !important; background-color: #ffffff !important; width: 100% !important; max-width: 100% !important; padding: 5px !important; margin: 0 !important; }
-            
-            /* Pwersahing lumabas ang magandang Main Title Header */
             h1 { display: block !important; color: #000000 !important; border-bottom: 2px solid #000000 !important; font-size: 18px !important; margin-bottom: 10px !important; padding-bottom: 5px !important; text-align: center !important; }
-            
-            /* Itago ang mga interactive forms kapag mag-pi-print */
             button, select, input, label, h3, .sight-card, .btn-secondary { display: none !important; }
-            
-            /* I-display ang malinis na summary grid */
             .result-box { display: block !important; border: none !important; background: #ffffff !important; background-color: #ffffff !important; color: #000000 !important; padding: 0 !important; margin-top: 5px !important; }
             .print-title { color: #000000 !important; font-weight: bold !important; font-size: 13px !important; margin-top: 10px !important; margin-bottom: 5px !important; }
             
-            /* VOYAGE DETAILS TABLE FOR PRINT */
             #printMetadata { 
                 display: block !important; 
                 border: 1px solid #000000 !important; 
@@ -68,14 +61,11 @@
             #printMetadata table { width: 100% !important; border-collapse: collapse !important; }
             #printMetadata td { border: none !important; padding: 2px 5px !important; color: #000000 !important; font-size: 11px !important; }
             
-            /* Log Table para sa Print */
             .result-table { width: 100% !important; background-color: #ffffff !important; color: #000000 !important; margin-top: 5px !important; font-size: 10px !important; }
             .result-table th, .result-table td { border: 1px solid #000000 !important; color: #000000 !important; padding: 5px !important; background: none !important; }
             .result-table th { background-color: #f1f5f9 !important; color: #000000 !important; font-weight: bold !important; }
             
-            /* Compress ang mapa para eksakto sa 1/1 Page */
             #map { display: block !important; height: 320px !important; border: 1px solid #000000 !important; margin-top: 10px !important; background-color: #ffffff !important; page-break-inside: avoid !important; }
-            
             .dev-footer { color: #000000 !important; border-top: 1px solid #000000 !important; margin-top: 15px !important; padding-top: 5px !important; font-size: 10px !important; }
             .dev-name { color: #000000 !important; font-weight: bold !important; font-size: 11px !important; }
         }
@@ -84,7 +74,7 @@
 <body>
 
 <div class="container">
-    <h1>⚓ 3-SIGHT CELESTIAL FIX ENGINE <span style="font-size:12px; color:#10B981; vertical-align:middle;">[DYNAMIC INTERVAL v4.50]</span></h1>
+    <h1>⚓ 3-SIGHT CELESTIAL FIX ENGINE <span style="font-size:12px; color:#10B981; vertical-align:middle;">[MANUAL ALMANAC v5.00]</span></h1>
 
     <h3>📝 Vessel Voyage Log</h3>
     <div class="grid-2">
@@ -125,7 +115,7 @@
         <div>
             <label>Assumed Latitude:</label>
             <div class="row-inline">
-                <input type="number" id="latDeg" value="14">
+                <input type="number" id="latDeg" value="14" style="width:70px;">
                 <input type="number" id="latMin" value="30" step="0.1">
                 <select id="latDir" style="width: 70px;"><option value="N">N</option><option value="S">S</option></select>
             </div>
@@ -133,31 +123,39 @@
         <div>
             <label>Assumed Longitude:</label>
             <div class="row-inline">
-                <input type="number" id="lonDeg" value="120">
+                <input type="number" id="lonDeg" value="120" style="width:70px;">
                 <input type="number" id="lonMin" value="45" step="0.1">
                 <select id="lonDir" style="width: 70px;"><option value="E">E</option><option value="W">W</option></select>
             </div>
         </div>
     </div>
 
-    <h3>🌌 Multi-Sight Observation Data (With Independent UTC Counters)</h3>
+    <h3>🌌 Multi-Sight Observation Data (Manual Almanac Entry)</h3>
     <div class="grid-3">
         <div class="sight-card s1">
             <div class="sight-title" style="color: #38BDF8;">🎯 SIGHT #1</div>
-            <label>Body / Target:</label>
-            <select id="body1"></select>
+            <label>Body / Target Name:</label>
+            <input type="text" id="bodyName1" value="ANTARES">
             
-            <label>Obs Date (LMT):</label>
-            <input type="date" id="date1">
-            
-            <label>Obs Time (LMT) & Seconds:</label>
+            <label>Obs Time (LMT):</label>
             <div class="row-inline">
                 <input type="time" id="time1" value="17:50">
-                <input type="number" id="sec1" value="24" min="0" max="59" placeholder="SS" style="width:75px; text-align:center;">
+                <input type="number" id="sec1" value="24" min="0" max="59" placeholder="SS" style="width:65px; text-align:center;">
             </div>
-
-            <label>Zone Description (ZD):</label>
-            <input type="number" id="zd1" value="8" step="1">
+            <input type="hidden" id="date1"> <div style="background-color: #0F172A; padding: 8px; border-radius: 6px; margin-top: 8px; border: 1px dashed #38BDF8;">
+                <span style="font-size: 11px; color: #38BDF8; font-weight: bold;">📕 NAUTICAL ALMANAC DATA</span>
+                <label>Total GHA (or GHA Aries+SHA):</label>
+                <div class="row-inline">
+                    <input type="number" id="ghaDeg1" value="199" placeholder="deg" style="width:70px;">
+                    <input type="number" id="ghaMin1" value="57.0" step="0.1" placeholder="min">
+                </div>
+                <label>Declination (Dec):</label>
+                <div class="row-inline">
+                    <input type="number" id="decDeg1" value="26" placeholder="deg" style="width:70px;">
+                    <input type="number" id="decMin1" value="31.0" step="0.1" placeholder="min">
+                    <select id="decDir1" style="width: 60px;"><option value="N">N</option><option value="S" selected>S</option></select>
+                </div>
+            </div>
 
             <label>Sextant Altitude (Hs):</label>
             <div class="row-inline">
@@ -170,20 +168,30 @@
 
         <div class="sight-card s2">
             <div class="sight-title" style="color: #10B981;">🎯 SIGHT #2</div>
-            <label>Body / Target:</label>
-            <select id="body2"></select>
+            <label>Body / Target Name:</label>
+            <input type="text" id="bodyName2" value="HADAR">
             
-            <label>Obs Date (LMT):</label>
-            <input type="date" id="date2">
-            
-            <label>Obs Time (LMT) & Seconds:</label>
+            <label>Obs Time (LMT):</label>
             <div class="row-inline">
                 <input type="time" id="time2" value="17:53">
-                <input type="number" id="sec2" value="15" min="0" max="59" placeholder="SS" style="width:75px; text-align:center;">
+                <input type="number" id="sec2" value="15" min="0" max="59" placeholder="SS" style="width:65px; text-align:center;">
             </div>
+            <input type="hidden" id="date2">
 
-            <label>Zone Description (ZD):</label>
-            <input type="number" id="zd2" value="8" step="1">
+            <div style="background-color: #0F172A; padding: 8px; border-radius: 6px; margin-top: 8px; border: 1px dashed #10B981;">
+                <span style="font-size: 11px; color: #10B981; font-weight: bold;">📕 NAUTICAL ALMANAC DATA</span>
+                <label>Total GHA (or GHA Aries+SHA):</label>
+                <div class="row-inline">
+                    <input type="number" id="ghaDeg2" value="237" placeholder="deg" style="width:70px;">
+                    <input type="number" id="ghaMin2" value="55.2" step="0.1" placeholder="min">
+                </div>
+                <label>Declination (Dec):</label>
+                <div class="row-inline">
+                    <input type="number" id="decDeg2" value="60" placeholder="deg" style="width:70px;">
+                    <input type="number" id="decMin2" value="26.0" step="0.1" placeholder="min">
+                    <select id="decDir2" style="width: 60px;"><option value="N">N</option><option value="S" selected>S</option></select>
+                </div>
+            </div>
 
             <label>Sextant Altitude (Hs):</label>
             <div class="row-inline">
@@ -196,20 +204,30 @@
 
         <div class="sight-card s3">
             <div class="sight-title" style="color: #F59E0B;">🎯 SIGHT #3</div>
-            <label>Body / Target:</label>
-            <select id="body3"></select>
+            <label>Body / Target Name:</label>
+            <input type="text" id="bodyName3" value="REGULUS">
             
-            <label>Obs Date (LMT):</label>
-            <input type="date" id="date3">
-            
-            <label>Obs Time (LMT) & Seconds:</label>
+            <label>Obs Time (LMT):</label>
             <div class="row-inline">
                 <input type="time" id="time3" value="17:57">
-                <input type="number" id="sec3" value="48" min="0" max="59" placeholder="SS" style="width:75px; text-align:center;">
+                <input type="number" id="sec3" value="48" min="0" max="59" placeholder="SS" style="width:65px; text-align:center;">
             </div>
+            <input type="hidden" id="date3">
 
-            <label>Zone Description (ZD):</label>
-            <input type="number" id="zd3" value="8" step="1">
+            <div style="background-color: #0F172A; padding: 8px; border-radius: 6px; margin-top: 8px; border: 1px dashed #F59E0B;">
+                <span style="font-size: 11px; color: #F59E0B; font-weight: bold;">📕 NAUTICAL ALMANAC DATA</span>
+                <label>Total GHA (or GHA Aries+SHA):</label>
+                <div class="row-inline">
+                    <input type="number" id="ghaDeg3" value="299" placeholder="deg" style="width:70px;">
+                    <input type="number" id="ghaMin3" value="21.6" step="0.1" placeholder="min">
+                </div>
+                <label>Declination (Dec):</label>
+                <div class="row-inline">
+                    <input type="number" id="decDeg3" value="11" placeholder="deg" style="width:70px;">
+                    <input type="number" id="decMin3" value="52.0" step="0.1" placeholder="min">
+                    <select id="decDir3" style="width: 60px;"><option value="N" selected>N</option><option value="S">S</option></select>
+                </div>
+            </div>
 
             <label>Sextant Altitude (Hs):</label>
             <div class="row-inline">
@@ -236,7 +254,7 @@
             <thead>
                 <tr>
                     <th>Sight</th>
-                    <th>Observed LMT / UTC Time</th>
+                    <th>Observed LMT</th>
                     <th>Body Target</th>
                     <th>Raw Hs</th>
                     <th>IE</th>
@@ -266,10 +284,6 @@
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-    const starDatabase = {
-        alpheratz: { name: "Alpheratz", sha: 357.6, dec: 29.2 }, ankaa: { name: "Ankaa", sha: 353.0, dec: -42.2 }, schedar: { name: "Schedar", sha: 349.3, dec: 56.6 }, diphda: { name: "Diphda", sha: 349.1, dec: -18.0 }, achernar: { name: "Achernar", sha: 335.3, dec: -57.2 }, hamal: { name: "Hamal", sha: 327.9, dec: 23.5 }, akarnar: { name: "Acamar", sha: 315.2, dec: -40.3 }, menkar: { name: "Menkar", sha: 314.1, dec: 4.1 }, mirfak: { name: "Mirfak", sha: 308.7, dec: 49.9 }, aldebaran: { name: "Aldebaran", sha: 290.9, dec: 16.5 }, rigel: { name: "Rigel", sha: 281.1, dec: -8.2 }, capella: { name: "Capella", sha: 280.6, dec: 46.0 }, bellatrix: { name: "Bellatrix", sha: 278.3, dec: 6.4 }, elnath: { name: "Elnath", sha: 278.1, dec: 28.6 }, alnilam: { name: "Alnilam", sha: 275.8, dec: -1.2 }, betelgeuse: { name: "Betelgeuse", sha: 271.0, dec: 7.4 }, canopus: { name: "Canopus", sha: 263.9, dec: -52.7 }, sirius: { name: "Sirius", sha: 258.4, dec: -16.7 }, adhara: { name: "Adhara", sha: 255.4, dec: -29.0 }, procyon: { name: "Procyon", sha: 245.0, dec: 5.2 }, pollux: { name: "Pollux", sha: 243.4, dec: 28.0 }, avior: { name: "Avior", sha: 234.2, dec: -59.5 }, suhail: { name: "Suhail", sha: 222.9, dec: -43.4 }, miaplacidus: { name: "Miaplacidus", sha: 221.4, dec: -69.8 }, alphard: { name: "Alphard", sha: 218.0, dec: -8.7 }, regulus: { name: "Regulus", sha: 207.8, dec: 12.0 }, algieba: { name: "Algieba", sha: 205.7, dec: 19.8 }, merak: { name: "Merak", sha: 182.1, dec: 56.3 }, dubhe: { name: "Dubhe", sha: 193.9, dec: 61.7 }, denebola: { name: "Denebola", sha: 182.6, dec: 14.6 }, gienah: { name: "Gienah", sha: 175.9, dec: -17.5 }, acrux: { name: "Acrux", sha: 173.2, dec: -63.2 }, gacrux: { name: "Gacrux", sha: 172.1, dec: -57.2 }, alioth: { name: "Alioth", sha: 166.4, dec: 56.0 }, spica: { name: "Spica", sha: 158.4, dec: -11.2 }, alcaid: { name: "Alkaid", sha: 153.0, dec: 49.3 }, hadar: { name: "Hadar", sha: 148.8, dec: -60.4 }, menkent: { name: "Menkent", sha: 148.1, dec: -36.4 }, arcturus: { name: "Arcturus", sha: 145.9, dec: 19.1 }, rigil_kent: { name: "Rigil Kentaurus", sha: 139.9, dec: -60.8 }, zubenelgenubi: { name: "Zubenelgenubi", sha: 137.1, dec: -16.1 }, kochab: { name: "Kochab", sha: 137.3, dec: 74.2 }, alphecca: { name: "Alphecca", sha: 126.1, dec: 26.7 }, antares: { name: "Antares", sha: 112.3, dec: -26.4 }, atria: { name: "Atria", sha: 107.2, dec: -69.0 }, sabik: { name: "Sabik", sha: 102.2, dec: -15.7 }, shaula: { name: "Shaula", sha: 96.4, dec: -37.1 }, rasalhague: { name: "Rasalhague", sha: 96.1, dec: 12.6 }, etamin: { name: "Eltanin", sha: 90.1, dec: 51.5 }, kaus_australis: { name: "Kaus Australis", sha: 83.9, dec: -34.4 }, vega: { name: "Vega", sha: 96.4, dec: 38.8 }, nunki: { name: "Nunki", sha: 76.1, dec: -26.3 }, altair: { name: "Altair", sha: 62.1, dec: 8.9 }, peacock: { name: "Peacock", sha: 53.2, dec: -56.7 }, deneb: { name: "Deneb", sha: 49.3, dec: 45.3 }, enif: { name: "Enif", sha: 33.9, dec: 9.9 }, fomalhaut: { name: "Fomalhaut", sha: 15.3, dec: -29.6 }
-    };
-
     let map = null, mapLayerGroup = null, globalTxtData = "";
 
     function synchronizeMasterTimeToSights() {
@@ -284,17 +298,6 @@
         }
     }
 
-    function calculateIndividualUTC(dateStr, timeStr, secStr, zdVal) {
-        if (!dateStr || !timeStr) return null;
-        let [year, month, day] = dateStr.split('-').map(Number);
-        let [hour, minute] = timeStr.split(':').map(Number);
-        let second = parseInt(secStr) || 0;
-        
-        // Pagbuo ng Date Object gamit ang pure UTC reference base sa parameters ng user
-        let localTimestamp = Date.UTC(year, month - 1, day, hour, minute, second);
-        return new Date(localTimestamp - (zdVal * 60 * 60 * 1000));
-    }
-
     window.onload = function() {
         let now = new Date();
         let todayStr = now.toISOString().slice(0, 10);
@@ -305,43 +308,9 @@
             document.getElementById(`date${i}`).value = todayStr;
         }
 
-        populateBodySelect('body1', 'sirius');
-        populateBodySelect('body2', 'canopus');
-        populateBodySelect('body3', 'rigil_kent');
-
         map = L.map('map').setView([14.5, 120.75], 7);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18 }).addTo(map);
         mapLayerGroup = L.layerGroup().addTo(map);
-    }
-
-    function populateBodySelect(id, defaultVal) {
-        let select = document.getElementById(id);
-        let g1 = document.createElement('optgroup'); g1.label = "Solar System";
-        g1.appendChild(new Option("Sun (Araw)", "sun"));
-        g1.appendChild(new Option("Venus", "venus")); g1.appendChild(new Option("Mars", "mars"));
-        g1.appendChild(new Option("Jupiter", "jupiter")); g1.appendChild(new Option("Saturn", "saturn"));
-        select.appendChild(g1);
-        let g2 = document.createElement('optgroup'); g2.label = "Stars";
-        for (let k in starDatabase) g2.appendChild(new Option(starDatabase[k].name, k, false, k === defaultVal));
-        select.appendChild(g2);
-    }
-
-    function computeEphemeris(target, utcDate) {
-        let jd = (utcDate.getTime() / 86400000) + 2440587.5;
-        let d = jd - 2451545.0; let T = d / 36525;
-        let gmst = (280.46061837 + 360.98564736629 * d) % 360; if(gmst < 0) gmst += 360;
-        if (starDatabase[target]) return { gha: (gmst + starDatabase[target].sha) % 360, dec: starDatabase[target].dec, name: starDatabase[target].name };
-        let obliq = (23.439291 - 0.0130041 * T) * Math.PI / 180;
-        if (target === "sun") {
-            let L = 280.46646 + 36000.76983 * T;
-            let g = (357.52911 + 35999.05029 * T) * Math.PI / 180;
-            let lambda = (L + 1.914602 * Math.sin(g) + 0.020008 * Math.sin(2 * g)) * Math.PI / 180;
-            let ra = Math.atan2(Math.cos(obliq) * Math.sin(lambda), Math.cos(lambda)) * 180 / Math.PI;
-            let dec = Math.asin(Math.sin(obliq) * Math.sin(lambda)) * 180 / Math.PI;
-            return { gha: (gmst - ra + 180) % 360, dec: dec, name: "SUN" };
-        }
-        let pOffsets = { venus: [50.4, -2.5], mars: [19.3, 12.4], jupiter: [19.8, -11.5], saturn: [316.9, 2.3] };
-        return { gha: (gmst - (pOffsets[target][0] + 500 * T)) % 360, dec: pOffsets[target][1], name: target.toUpperCase() };
     }
 
     function performTripleCelestialFix() {
@@ -367,12 +336,7 @@
         let dip = (1.76 * Math.sqrt(hoe)) / 60;
         L.marker([apLat, apLon]).addTo(mapLayerGroup).bindPopup("<b>🌐 Assumed Position (AP)</b>").openPopup();
         
-        // Form Validation for individual times
-        for (let i = 1; i <= 3; i++) {
-            let d = document.getElementById(`date${i}`).value;
-            let t = document.getElementById(`time${i}`).value;
-            if (!d || !t) { alert(`⚠️ Pakilagay ang LMT Date/Time para sa Sight #${i}.`); return; }
-        }
+        let masterDate = document.getElementById('date1').value || new Date().toISOString().slice(0,10);
 
         let metaHtml = `
             <table style="width:100%; border:none;">
@@ -393,7 +357,7 @@
         metaPrintBlock.style.display = "block";
 
         globalTxtData = `================================================================================\n`;
-        globalTxtData += `                  OFFICIAL AUTOMATED SIGHT REDUCTION REPORT\n`;
+        globalTxtData += `                  OFFICIAL SIGHT REDUCTION REPORT (MANUAL NA)\n`;
         globalTxtData += `================================================================================\n`;
         globalTxtData += `Vessel Name     : ${vessel}\nVoyage Number   : ${voyage}\nOfficer on Watch: ${oow}\nRemarks         : ${remarks}\n`;
         globalTxtData += `--------------------------------------------------------------------------------\n`;
@@ -403,78 +367,90 @@
 
         let colors = ["#38BDF8", "#10B981", "#F59E0B"];
         for (let i = 1; i <= 3; i++) {
-            let bodyKey = document.getElementById(`body${i}`).value;
-            let dVal = document.getElementById(`date${i}`).value;
+            let bodyName = document.getElementById(`bodyName${i}`).value.toUpperCase();
             let tVal = document.getElementById(`time${i}`).value;
             let sVal = document.getElementById(`sec${i}`).value || "00";
-            let zdVal = parseFloat(document.getElementById(`zd${i}`).value) || 0;
             
+            // Kuhanin ang Manual Almanac Values na in-input ng OOW
+            let ghaD = parseFloat(document.getElementById(`ghaDeg${i}`).value) || 0;
+            let ghaM = parseFloat(document.getElementById(`ghaMin${i}`).value) || 0;
+            let ghaTotal = ghaD + (ghaM / 60);
+
+            let decD = parseFloat(document.getElementById(`decDeg${i}`).value) || 0;
+            let decM = parseFloat(document.getElementById(`decMin${i}`).value) || 0;
+            let decDir = document.getElementById(`decDir${i}`).value;
+            let declination = decD + (decM / 60); if(decDir === 'S') declination = -declination;
+
             let hsDeg = parseFloat(document.getElementById(`hsDeg${i}`).value) || 0;
             let hsMin = parseFloat(document.getElementById(`hsMin${i}`).value) || 0;
             let ieVal = parseFloat(document.getElementById(`ie${i}`).value) || 0;
             let ie = ieVal / 60;
             
-            // AUTOMATIC INTERVAL UTC REDUCTION BASE SA KANYA-KANYANG SIGHT TIME AT ZD
-            let utcDate = calculateIndividualUTC(dVal, tVal, sVal, zdVal);
-            let displayUTCStr = utcDate.toUTCString().replace("GMT", "UTC");
-            
-            let data = computeEphemeris(bodyKey, utcDate);
-            
-            // LHA mathematical verification boundary loop (0-360)
-            let lha = (data.gha + apLon);
+            // SIGHT REDUCTION TRIGONOMETRY ENGINE
+            // LHA = GHA + Longitude (East is Plus (+), West is Minus (-))
+            let lha = ghaTotal + apLon;
             while(lha < 0) lha += 360;
             while(lha >= 360) lha -= 360;
             
+            // Sextant Corrections
             let hs = hsDeg + (hsMin / 60);
             let ha = hs + ie - dip;
             let refraction = (1.0 / Math.tan(ha * Math.PI / 180)) / 60;
-            let ho = ha - refraction; if (bodyKey === "sun") ho += (16.0 / 60);
+            let ho = ha - refraction; 
+            if (bodyName.includes("SUN")) ho += (16.0 / 60); // Semi-diameter adjustment if Sun
             
-            let latRad = apLat * Math.PI / 180; let decRad = data.dec * Math.PI / 180; let lhaRad = lha * Math.PI / 180;
+            // Cosine-Haversine Law formula para sa Hc
+            let latRad = apLat * Math.PI / 180; 
+            let decRad = declination * Math.PI / 180; 
+            let lhaRad = lha * Math.PI / 180;
+            
             let sinHc = (Math.sin(latRad) * Math.sin(decRad)) + (Math.cos(latRad) * Math.cos(decRad) * Math.cos(lhaRad));
-            let MathValueSin = sinHc; if(MathValueSin > 1) MathValueSin = 1; if(MathValueSin < -1) MathValueSin = -1;
-            let hc = Math.asin(MathValueSin) * 180 / Math.PI;
+            if(sinHc > 1) sinHc = 1; if(sinHc < -1) sinHc = -1;
+            let hc = Math.asin(sinHc) * 180 / Math.PI;
             
+            // Azimuth calculation
             let cosZ = (Math.sin(decRad) - (Math.sin(latRad) * sinHc)) / (Math.cos(latRad) * Math.cos(hc * Math.PI / 180));
             if (cosZ > 1) cosZ = 1; if (cosZ < -1) cosZ = -1;
             let Z = Math.acos(cosZ) * 180 / Math.PI;
-            let zn = (lha > 0 && lha < 180) ? 360 - Z : Z;
             
-            let intercept = (ho - hc) * 60; let dirTxt = intercept >= 0 ? "TOWARDS" : "AWAY";
+            // Convert to 360-degree system Zn base sa LHA
+            let zn = (lha > 180) ? Z : 360 - Z;
+            
+            let intercept = (ho - hc) * 60; 
+            let dirTxt = intercept >= 0 ? "TOWARDS" : "AWAY";
             
             tbody.innerHTML += `<tr>
                 <td><b>Sight ${i}</b></td>
-                <td><small><b>LMT:</b> ${tVal}:${sVal.padStart(2,'0')}<br><span style="color:#10B981;"><b>UTC:</b> ${utcDate.toISOString().slice(11,19)}</span></small></td>
-                <td><b>${data.name}</b></td>
+                <td><small>${tVal}:${sVal.padStart(2,'0')}</small></td>
+                <td><b>${bodyName}</b></td>
                 <td>${hsDeg}° ${hsMin}'</td>
                 <td>${ieVal >= 0 ? '+' : ''}${ieVal}'</td>
                 <td>-${(dip*60).toFixed(1)}'</td>
                 <td>${ho.toFixed(4)}°</td>
-                <td>${data.gha.toFixed(2)}°</td>
-                <td>${data.dec.toFixed(2)}°</td>
+                <td>${ghaTotal.toFixed(2)}°</td>
+                <td>${Math.abs(declination).toFixed(2)}° ${decDir}</td>
                 <td>${lha.toFixed(2)}°</td>
                 <td>${hc.toFixed(4)}°</td>
                 <td><b>${Math.abs(intercept).toFixed(1)} NM ${dirTxt}</b></td>
                 <td><b>${zn.toFixed(1)}° T</b></td>
             </tr>`;
             
-            globalTxtData += `[SIGHT #${i} REDUCTION DETAILS - ${data.name}]\n`;
-            globalTxtData += `  -> Sighting Time (LMT)   : ${dVal} ${tVal}:${sVal.padStart(2,'0')} (ZD: ${zdVal >= 0 ? '+' : ''}${zdVal})\n`;
-            globalTxtData += `  -> Calculated Time (UTC) : ${displayUTCStr}\n`;
+            globalTxtData += `[SIGHT #${i} REDUCTION DETAILS - ${bodyName}]\n`;
+            globalTxtData += `  -> Sighting Time (LMT)   : ${masterDate} ${tVal}:${sVal.padStart(2,'0')}\n`;
             globalTxtData += `  -> Sextant Altitude (Hs) : ${hsDeg}° ${hsMin}'\n`;
             globalTxtData += `  -> Index Error (IE)      : ${ieVal >= 0 ? '+' : ''}${ieVal}'\n`;
             globalTxtData += `  -> True Observed Alt (Ho): ${ho.toFixed(4)}°\n`;
-            globalTxtData += `  -> Geographic GHA Body   : ${data.gha.toFixed(4)}°\n`;
-            globalTxtData += `  -> Declination (Dec)     : ${data.dec.toFixed(4)}°\n`;
+            globalTxtData += `  -> Manual GHA Entered    : ${ghaTotal.toFixed(4)}°\n`;
+            globalTxtData += `  -> Manual Dec Entered    : ${Math.abs(declination).toFixed(4)}° ${decDir}\n`;
             globalTxtData += `  -> Local Hour Angle (LHA): ${lha.toFixed(4)}°\n`;
             globalTxtData += `  -> Calculated Alt (Hc)   : ${hc.toFixed(4)}°\n`;
             globalTxtData += `  -> INTERCEPT RESULT      : ${Math.abs(intercept).toFixed(1)} Nautical Miles (${dirTxt})\n`;
             globalTxtData += `  -> True Azimuth (Zn)     : ${zn.toFixed(1)}° True\n`;
             globalTxtData += `--------------------------------------------------------------------------------\n`;
             
-            plotLopVector(apLat, apLon, zn, intercept, colors[i-1], data.name);
+            plotLopVector(apLat, apLon, zn, intercept, colors[i-1], bodyName);
         }
-        globalTxtData += `\nGenerated Engine v4.50 | Marine Navigation Software Solutions 2026\n`;
+        globalTxtData += `\nGenerated Engine v5.00 | Marine Navigation Software Solutions 2026\n`;
         document.getElementById('resultBox').style.display = "block";
         map.setView([apLat, apLon], 8); map.invalidateSize();
     }
@@ -495,7 +471,7 @@
     function downloadLocalRecordFile() {
         if (!globalTxtData) { alert("⚠️ Paki-calculate muna bago mag-download."); return; }
         let blob = new Blob([globalTxtData], { type: "text/plain;charset=utf-8" });
-        let link = document.createElement("a"); link.download = `3_Sight_Complete_Interval_Fix_Log.txt`;
+        let link = document.createElement("a"); link.download = `3_Sight_Manual_Almanac_Fix_Log.txt`;
         link.href = URL.createObjectURL(blob); document.body.appendChild(link); link.click(); document.body.removeChild(link);
     }
 </script>
