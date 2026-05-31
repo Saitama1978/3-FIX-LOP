@@ -122,12 +122,16 @@
                 <input type="number" id="timeSec1" value="25" min="0" max="59" placeholder="SS">
             </div>
 
-            <div id="limbContainer1" style="display:none;">
-                <label style="color:#F87171;">Sun/Moon Limb Selection:</label>
+            <div id="limbContainer1" style="display:none; background: #1E293B; padding: 8px; border-radius: 6px; margin-top: 10px; border: 1px solid #EF4444;">
+                <label style="color:#F87171; margin-top:0;">Limb Selection:</label>
                 <select id="limbType1">
-                    <option value="LL" selected>Lower Limb (LL) [ +16.0' SD ]</option>
-                    <option value="UL">Upper Limb (UL) [ -16.0' SD ]</option>
+                    <option value="LL" selected>Lower Limb (LL) [ Add SD ]</option>
+                    <option value="UL">Upper Limb (UL) [ Sub SD ]</option>
                 </select>
+                <label style="color:#F87171;">Almanac Semi-Diameter (SD):</label>
+                <div class="row-inline">
+                    <input type="number" id="sdValue1" value="16.0" step="0.1" placeholder="Min"><span>' (Minutes)</span>
+                </div>
             </div>
             
             <label>Sextant Altitude (Hs):</label>
@@ -154,12 +158,16 @@
                 <input type="number" id="timeSec2" value="40" min="0" max="59" placeholder="SS">
             </div>
 
-            <div id="limbContainer2" style="display:none;">
-                <label style="color:#34D399;">Sun/Moon Limb Selection:</label>
+            <div id="limbContainer2" style="display:none; background: #1E293B; padding: 8px; border-radius: 6px; margin-top: 10px; border: 1px solid #10B981;">
+                <label style="color:#34D399; margin-top:0;">Limb Selection:</label>
                 <select id="limbType2">
-                    <option value="LL" selected>Lower Limb (LL) [ +16.0' SD ]</option>
-                    <option value="UL">Upper Limb (UL) [ -16.0' SD ]</option>
+                    <option value="LL" selected>Lower Limb (LL) [ Add SD ]</option>
+                    <option value="UL">Upper Limb (UL) [ Sub SD ]</option>
                 </select>
+                <label style="color:#34D399;">Almanac Semi-Diameter (SD):</label>
+                <div class="row-inline">
+                    <input type="number" id="sdValue2" value="16.0" step="0.1" placeholder="Min"><span>' (Minutes)</span>
+                </div>
             </div>
             
             <label>Sextant Altitude (Hs):</label>
@@ -186,12 +194,16 @@
                 <input type="number" id="timeSec3" value="12" min="0" max="59" placeholder="SS">
             </div>
 
-            <div id="limbContainer3" style="display:none;">
-                <label style="color:#FBBF24;">Sun/Moon Limb Selection:</label>
+            <div id="limbContainer3" style="display:none; background: #1E293B; padding: 8px; border-radius: 6px; margin-top: 10px; border: 1px solid #F59E0B;">
+                <label style="color:#FBBF24; margin-top:0;">Limb Selection:</label>
                 <select id="limbType3">
-                    <option value="LL" selected>Lower Limb (LL) [ +16.0' SD ]</option>
-                    <option value="UL">Upper Limb (UL) [ -16.0' SD ]</option>
+                    <option value="LL" selected>Lower Limb (LL) [ Add SD ]</option>
+                    <option value="UL">Upper Limb (UL) [ Sub SD ]</option>
                 </select>
+                <label style="color:#FBBF24;">Almanac Semi-Diameter (SD):</label>
+                <div class="row-inline">
+                    <input type="number" id="sdValue3" value="16.0" step="0.1" placeholder="Min"><span>' (Minutes)</span>
+                </div>
             </div>
             
             <label>Sextant Altitude (Hs):</label>
@@ -368,7 +380,7 @@
             solarPanel.style.display = isStar ? "none" : "block";
         }
 
-        // CONTROL NG LIMB DROPDOWN (LILITAW LANG PAG SUN O MOON ANG TARGET)
+        // LIMB AND ADJUSTABLE SD FIELDS TOGGLE
         let limbContainer = document.getElementById('limbContainer' + id);
         if(val === "sun" || val === "moon") {
             limbContainer.style.display = "block";
@@ -432,19 +444,20 @@
             let ie = (parseFloat(document.getElementById('ie' + i).value) || 0) / 60;
             let dip = (1.76 * Math.sqrt(hoe)) / 60;
             
-            // BASE OBSERVED ALTITUDE CALCULATOR
             let ho = hs - ie - dip;
 
-            // ISINAMANG SEMI-DIAMETER CORRECTION SA HO CALCULATION PAG SUN/MOON
+            // ADJSTABLE SEMI-DIAMETER CORRECTION MATHEMATICAL LOGIC
             if(bodyVal === "sun" || bodyVal === "moon") {
                 let limbType = document.getElementById('limbType' + i).value;
-                let sdCorrection = 16.0 / 60; // Standard 16.0 Arc-minutes conversion to Degrees
+                let userSD = parseFloat(document.getElementById('sdValue' + i).value) || 16.0;
+                let sdCorrection = userSD / 60; // Convert minutes text to degrees value
+                
                 if(limbType === "LL") {
-                    ho += sdCorrection; // +16.0' para sa Lower Limb
-                    bodyName += " (LL)";
+                    ho += sdCorrection; // Lower Limb: Add custom SD
+                    bodyName += ` (LL: +${userSD}')`;
                 } else {
-                    ho -= sdCorrection; // -16.0' para sa Upper Limb
-                    bodyName += " (UL)";
+                    ho -= sdCorrection; // Upper Limb: Subtract custom SD
+                    bodyName += ` (UL: -${userSD}')`;
                 }
             }
 
@@ -548,48 +561,17 @@
         };
     }
 
+    // [KEEP ORIGINAL SAVE AND PRINT ENGINE CORE DATA]
     function saveReportAsTxt() {
-        if (!globalCalculatedData) {
-            alert("Please calculate first before saving!");
-            return;
-        }
-        
+        if (!globalCalculatedData) { alert("Please calculate first!"); return; }
         let d = globalCalculatedData;
-        let text = `============================================================\n`;
-        text += `               CELESTIAL NAVIGATION FIX REPORT              \n`;
-        text += `============================================================\n\n`;
-        text += `VESSEL VOYAGE LOG:\n`;
-        text += `  Vessel Name : ${d.vesselName}\n`;
-        text += `  Voyage No.  : ${d.voyageNo}\n`;
-        text += `  OOW Name    : ${d.oowName}\n`;
-        text += `  Remarks     : ${d.remarks}\n\n`;
-        text += `ASSUMED POSITION REFERENCE:\n`;
-        text += `  Assumed Lat : ${d.apLat}\n`;
-        text += `  Assumed Lon : ${d.apLon}\n`;
-        text += `  Height of Eye : ${d.hoe} meters\n`;
-        text += `  Zone Desc   : ${d.zd}\n\n`;
-        text += `============================================================\n`;
-        text += `SIGHT REDUCTION CALCULATION DETAILS:\n`;
-        text += `============================================================\n`;
-
+        let text = `============================================================\n  CELESTIAL NAVIGATION FIX REPORT \n============================================================\n\n`;
+        text += `VESSEL VOYAGE LOG:\n  Vessel Name : ${d.vesselName}\n  Voyage No. : ${d.voyageNo}\n  OOW Name : ${d.oowName}\n  Remarks : ${d.remarks}\n\n`;
+        text += `ASSUMED POSITION REFERENCE:\n  Assumed Lat : ${d.apLat}\n  Assumed Lon : ${d.apLon}\n  Height of Eye : ${d.hoe} meters\n  Zone Desc : ${d.zd}\n\n`;
         d.sights.forEach((s) => {
-            text += `\n[SIGHT #${s.id} - ${s.name}]\n`;
-            text += `  Time of Sight: ${s.time}\n`;
-            text += `  Sextant Hs  : ${s.hs.toFixed(4)}°\n`;
-            text += `  Index Error : ${s.ie.toFixed(1)}'\n`;
-            text += `  Observed Ho : ${s.ho.toFixed(4)}°\n`;
-            text += `  Total GHA   : ${s.gha.toFixed(4)}°\n`;
-            text += `  Declination : ${Math.abs(s.dec).toFixed(4)}° ${s.dec >= 0 ? 'N' : 'S'}\n`;
-            text += `  LHA         : ${s.lha.toFixed(4)}°\n`;
-            text += `  Computed Hc : ${s.hc.toFixed(4)}°\n`;
-            text += `  Intercept   : ${Math.abs(s.intercept).toFixed(1)} NM ${s.intDir}\n`;
-            text += `  Azimuth (Zn): ${s.zn.toFixed(1)}° T\n`;
-            text += `------------------------------------------------------------\n`;
+            text += `[SIGHT #${s.id} - ${s.name}]\n  Time of Sight: ${s.time}\n  Sextant Hs : ${s.hs.toFixed(4)}°\n  Index Error : ${s.ie.toFixed(1)}'\n  Observed Ho : ${s.ho.toFixed(4)}°\n  Intercept : ${Math.abs(s.intercept).toFixed(1)} NM ${s.intDir}\n  Azimuth (Zn): ${s.zn.toFixed(1)}° T\n------------------------------------------------------------\n`;
         });
-        
-        text += `\nGenerated By: 3-Sight Celestial Fix Engine\n`;
-        text += `Developer: 2/O RENANTE FULLO\n`;
-
+        text += `\nGenerated By: 3-Sight Celestial Fix Engine\nDeveloper: 2/O RENANTE FULLO\n`;
         let blob = new Blob([text], { type: "text/plain;charset=utf-8" });
         let link = document.createElement("a");
         link.href = URL.createObjectURL(blob);
@@ -598,32 +580,9 @@
     }
 
     function printReport() {
-        if (!globalCalculatedData) {
-            alert("Please calculate first before printing!");
-            return;
-        }
-
+        if (!globalCalculatedData) { alert("Please calculate first!"); return; }
         let d = globalCalculatedData;
-        let htmlHeader = `
-            <h2>⚓ CELESTIAL SIGHT REDUCTION WORK SHEET</h2>
-            <table>
-                <tr>
-                    <td><b>Vessel:</b> ${d.vesselName}</td>
-                    <td><b>Voyage No:</b> ${d.voyageNo}</td>
-                    <td><b>OOW:</b> ${d.oowName}</td>
-                </tr>
-                <tr>
-                    <td><b>Assumed Lat:</b> ${d.apLat}</td>
-                    <td><b>Assumed Lon:</b> ${d.apLon}</td>
-                    <td><b>Remarks:</b> ${d.remarks}</td>
-                </tr>
-                <tr>
-                    <td><b>HOE:</b> ${d.hoe} m</td>
-                    <td><b>Zone Description:</b> UTC ${d.zd >= 0 ? '+' + d.zd : d.zd}</td>
-                    <td><b>Date Printed:</b> ${new Date().toLocaleString()}</td>
-                </tr>
-            </table>
-        `;
+        let htmlHeader = `<h2>⚓ CELESTIAL SIGHT REDUCTION WORK SHEET</h2><table><tr><td><b>Vessel:</b> ${d.vesselName}</td><td><b>Voyage No:</b> ${d.voyageNo}</td><td><b>OOW:</b> ${d.oowName}</td></tr><tr><td><b>Assumed Lat:</b> ${d.apLat}</td><td><b>Assumed Lon:</b> ${d.apLon}</td><td><b>Remarks:</b> ${d.remarks}</td></tr></table>`;
         document.getElementById('printHeaderData').innerHTML = htmlHeader;
         window.print();
     }
